@@ -9,12 +9,16 @@ interface CreateGameProps {
 }
 
 export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
-  const [maxPlayers, setMaxPlayers] = useState(4);
+  const [maxPlayers, setMaxPlayers] = useState('4');
   const [hostName, setHostName] = useState('');
 
+  const playerCount = parseInt(maxPlayers) || 0;
+  const isValidPlayerCount = playerCount >= 2 && playerCount <= 20;
+  const showError = maxPlayers !== '' && !isValidPlayerCount;
+
   const handleCreate = () => {
-    if (maxPlayers >= 2 && maxPlayers <= 20 && hostName.trim()) {
-      onCreateGame(maxPlayers, hostName.trim());
+    if (isValidPlayerCount && hostName.trim()) {
+      onCreateGame(playerCount, hostName.trim());
     }
   };
 
@@ -54,19 +58,27 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
             </label>
             <input
               type="number"
-              min="2"
+              min="1"
               max="20"
               value={maxPlayers}
-              onChange={(e) => setMaxPlayers(parseInt(e.target.value) || 2)}
-              className="luxury-input"
+              onChange={(e) => setMaxPlayers(e.target.value)}
+              className={`luxury-input ${showError ? 'border-2 border-red-500 focus:ring-red-500' : ''}`}
+              placeholder="2-20"
             />
-            <p className="text-xs text-slate-400 mt-2">
-              Choose between 2-20 players
-            </p>
+            {showError && (
+              <p className="text-sm text-red-400 mt-2 font-medium">
+                ⚠️ Player count must be between 2 and 20
+              </p>
+            )}
+            {!showError && (
+              <p className="text-xs text-slate-400 mt-2">
+                Choose between 2-20 players
+              </p>
+            )}
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-6">
           <button
             onClick={onBack}
             className="luxury-button-secondary flex-1"
@@ -75,7 +87,7 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
           </button>
           <button
             onClick={handleCreate}
-            disabled={maxPlayers < 2 || maxPlayers > 20 || !hostName.trim()}
+            disabled={!isValidPlayerCount || !hostName.trim()}
             className="luxury-button-primary flex-1"
           >
             Create Session

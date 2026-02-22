@@ -32,7 +32,7 @@ export default function JoinGame({ onJoinGame, onBack }: JoinGameProps) {
           <p className="text-slate-300">Enter your details to join</p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
             <label className="block text-sm font-medium mb-2 text-slate-300">
               Game Code
@@ -62,7 +62,7 @@ export default function JoinGame({ onJoinGame, onBack }: JoinGameProps) {
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-6">
           <button
             onClick={onBack}
             className="luxury-button-secondary flex-1"
