@@ -14,9 +14,9 @@ A premium, real-time role assignment platform for games. Built with world-class 
 
 ### Premium Design
 - **Modern Typography**: Clean, readable Inter font family
-- **Luxury Color Palette**: Deep blacks, soft grays, and refined indigo accent
-- **Smooth Animations**: Framer Motion powered micro-interactions
-- **Glass Morphism**: Backdrop blur effects and subtle transparency
+- **Cyan Wave Theme**: Beautiful cyan and teal gradients with wave-inspired animations
+- **Smooth Animations**: Framer Motion powered micro-interactions with floating orbs
+- **Glass Morphism**: Backdrop blur effects with subtle cyan glows
 - **Responsive Layout**: Mobile-first design that scales beautifully
 - **Real-time Updates**: Instant synchronization across all players
 
@@ -132,13 +132,17 @@ Home → Create/Join → Lobby → Game Started → Role Revealed
 ## Customization
 
 ### Colors
-Edit `tailwind.config.js` to customize the luxury color palette:
+Edit `tailwind.config.js` to customize the cyan wave color palette:
 ```js
 colors: {
   luxury: {
-    black: '#0A0A0A',
-    accent: '#6366F1',
-    // ... more colors
+    accent: '#06B6D4', // Cyan
+    'accent-dark': '#0891B2', // Darker cyan
+  },
+  wave: {
+    cyan: {
+      // Full cyan color palette
+    }
   }
 }
 ```

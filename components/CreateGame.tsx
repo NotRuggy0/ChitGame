@@ -34,7 +34,6 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
           <p className="text-slate-400">Set up a new session</p>
         </div>
 
-        <div className="space-y-4">
         <div className="space-y-5">
           <div>
             <label className="block text-sm font-medium mb-2 text-cyan-300/80">
