@@ -15,10 +15,11 @@ import ConfettiEffect from '../components/ConfettiEffect';
 import CountdownTimer from '../components/CountdownTimer';
 import ThemeSwitcher from '../components/ThemeSwitcher';
 import GameHistory from '../components/GameHistory';
+import InGameChat from '../components/InGameChat';
 import { motion, AnimatePresence } from 'framer-motion';
 import { saveGameToHistory } from '../utils/gameHistory';
 
-type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game';
+type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game' | 'in-game';
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>('home');
@@ -32,6 +33,7 @@ export default function Home() {
     playerId,
     assignedChit,
     error,
+    chatMessages,
     createGame,
     joinGame,
     toggleReady,
@@ -42,6 +44,8 @@ export default function Home() {
     leaveGame,
     kickPlayer,
     restartGame,
+    sendChatMessage,
+    requestRematch,
   } = useWebSocket();
 
   const handleCreateGame = (maxPlayers: number, hostName: string) => {
@@ -72,6 +76,14 @@ export default function Home() {
 
   const handleBack = () => {
     setScreen('home');
+  };
+
+  const handleContinueToChat = () => {
+    setScreen('in-game');
+  };
+
+  const handleRematch = () => {
+    requestRematch();
   };
 
   // Save game to history when assigned a chit
@@ -207,6 +219,20 @@ export default function Home() {
           <GameResult
             assignedChit={assignedChit}
             onLeaveGame={handleLeaveGame}
+            onContinue={handleContinueToChat}
+            onRematch={handleRematch}
+          />
+        )}
+
+        {screen === 'in-game' && assignedChit && session && playerId && (
+          <InGameChat
+            assignedChit={assignedChit}
+            session={session}
+            playerId={playerId}
+            chatMessages={chatMessages}
+            onSendMessage={sendChatMessage}
+            onLeaveGame={handleLeaveGame}
+            onRematch={handleRematch}
           />
         )}
       </div>

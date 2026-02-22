@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import type { ClientMessage, ServerMessage, SessionSnapshot, Chit } from '../types';
+import type { ClientMessage, ServerMessage, SessionSnapshot, Chit, ChatMessage } from '../types';
 
 export function useWebSocket() {
   const [isConnected, setIsConnected] = useState(false);
@@ -7,6 +7,7 @@ export function useWebSocket() {
   const [playerId, setPlayerId] = useState<string | null>(null);
   const [assignedChit, setAssignedChit] = useState<Chit | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -52,7 +53,16 @@ export function useWebSocket() {
           case 'game_restarted':
             // Reset local state
             setAssignedChit(null);
+            setChatMessages([]);
             // Session update will follow
+            break;
+          case 'chat_message':
+            setChatMessages(prev => [...prev, message.chatMessage]);
+            break;
+          case 'rematch_requested':
+            // Show notification
+            setError(`${message.requesterName} requested a rematch!`);
+            setTimeout(() => setError(null), 3000);
             break;
         }
       } catch (err) {
@@ -126,7 +136,16 @@ export function useWebSocket() {
   const restartGame = useCallback(() => {
     // Reset assigned chit and clear roles
     setAssignedChit(null);
+    setChatMessages([]);
     send({ type: 'restart_game' });
+  }, [send]);
+
+  const sendChatMessage = useCallback((message: string) => {
+    send({ type: 'send_chat', message });
+  }, [send]);
+
+  const requestRematch = useCallback(() => {
+    send({ type: 'request_rematch' });
   }, [send]);
 
   return {
@@ -135,6 +154,7 @@ export function useWebSocket() {
     playerId,
     assignedChit,
     error,
+    chatMessages,
     createGame,
     joinGame,
     toggleReady,
@@ -145,5 +165,7 @@ export function useWebSocket() {
     leaveGame,
     kickPlayer,
     restartGame,
+    sendChatMessage,
+    requestRematch,
   };
 }

@@ -401,6 +401,49 @@ function handleRestartGame(hostId: string) {
   });
 }
 
+function handleChatMessage(senderId: string, message: string) {
+  const sessionCode = playerToSession.get(senderId);
+  if (!sessionCode) return;
+
+  const session = sessions.get(sessionCode);
+  if (!session) return;
+
+  const sender = session.players.get(senderId);
+  if (!sender) return;
+
+  const chatMessage = {
+    id: uuidv4(),
+    playerId: senderId,
+    playerName: sender.displayName,
+    message,
+    timestamp: Date.now(),
+  };
+
+  // Broadcast to all players in the session
+  broadcastToSession(sessionCode, {
+    type: 'chat_message',
+    chatMessage,
+  });
+}
+
+function handleRematchRequest(requesterId: string) {
+  const sessionCode = playerToSession.get(requesterId);
+  if (!sessionCode) return;
+
+  const session = sessions.get(sessionCode);
+  if (!session) return;
+
+  const requester = session.players.get(requesterId);
+  if (!requester) return;
+
+  // Broadcast rematch request to all players except the requester
+  broadcastToSession(sessionCode, {
+    type: 'rematch_requested',
+    requesterId,
+    requesterName: requester.displayName,
+  }, requesterId);
+}
+
 wss.on('connection', (ws: WebSocket) => {
   console.log('Client connected');
 
@@ -461,6 +504,18 @@ wss.on('connection', (ws: WebSocket) => {
           const hostId = Array.from(playerToSocket.entries())
             .find(([, socket]) => socket === ws)?.[0];
           if (hostId) handleRestartGame(hostId);
+          break;
+        }
+        case 'send_chat': {
+          const senderId = Array.from(playerToSocket.entries())
+            .find(([, socket]) => socket === ws)?.[0];
+          if (senderId) handleChatMessage(senderId, message.message);
+          break;
+        }
+        case 'request_rematch': {
+          const requesterId = Array.from(playerToSocket.entries())
+            .find(([, socket]) => socket === ws)?.[0];
+          if (requesterId) handleRematchRequest(requesterId);
           break;
         }
       }

@@ -8,9 +8,11 @@ import FlipCard from './FlipCard';
 interface GameResultProps {
   assignedChit: Chit;
   onLeaveGame: () => void;
+  onContinue: () => void;
+  onRematch: () => void;
 }
 
-export default function GameResult({ assignedChit, onLeaveGame }: GameResultProps) {
+export default function GameResult({ assignedChit, onLeaveGame, onContinue, onRematch }: GameResultProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
@@ -99,12 +101,42 @@ export default function GameResult({ assignedChit, onLeaveGame }: GameResultProp
         />
       </div>
       
-      <button
-        onClick={onLeaveGame}
-        className="luxury-button-secondary w-full"
+      {/* Action Buttons */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5 }}
+        className="space-y-3"
       >
-        Leave Game
-      </button>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={onContinue}
+          className="luxury-button-primary w-full text-lg py-4"
+        >
+          ✨ Continue to Chat
+        </motion.button>
+
+        <div className="grid grid-cols-2 gap-3">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onRematch}
+            className="luxury-button-secondary"
+          >
+            🔄 Rematch
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onLeaveGame}
+            className="luxury-button-secondary"
+          >
+            🚪 Leave
+          </motion.button>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }

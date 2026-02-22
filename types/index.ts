@@ -32,7 +32,17 @@ export type ClientMessage =
   | { type: 'start_game' }
   | { type: 'leave_game' }
   | { type: 'kick_player'; targetPlayerId: string }
-  | { type: 'restart_game' };
+  | { type: 'restart_game' }
+  | { type: 'send_chat'; message: string }
+  | { type: 'request_rematch' };
+
+export interface ChatMessage {
+  id: string;
+  playerId: string;
+  playerName: string;
+  message: string;
+  timestamp: number;
+}
 
 export type ServerMessage =
   | { type: 'game_created'; code: string; playerId: string }
@@ -43,7 +53,9 @@ export type ServerMessage =
   | { type: 'player_left'; playerId: string }
   | { type: 'host_changed'; newHostId: string }
   | { type: 'player_kicked'; playerId: string }
-  | { type: 'game_restarted' };
+  | { type: 'game_restarted' }
+  | { type: 'chat_message'; chatMessage: ChatMessage }
+  | { type: 'rematch_requested'; requesterId: string; requesterName: string };
 
 export interface SessionSnapshot {
   code: string;
