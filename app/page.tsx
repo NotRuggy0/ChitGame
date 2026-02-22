@@ -60,24 +60,24 @@ export default function Home() {
       {/* Navigation Bar - Always visible */}
       <Navbar showLogo={true} />
 
-      {/* Premium Dark Background with Warm Amber Gradients */}
+      {/* BRAND NEW VIBRANT CYAN-TEAL BACKGROUND - SUPER VISIBLE! */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        {/* Deep sophisticated gradient base */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950" />
+        {/* Vibrant gradient base */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-cyan-950 to-teal-950" />
         
-        {/* Warm amber accent glows - energetic yet sophisticated */}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-amber-600/15 to-orange-600/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
-        <div className="absolute bottom-0 right-1/4 w-[550px] h-[550px] bg-gradient-to-br from-orange-600/12 to-red-600/12 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }} />
-        <div className="absolute top-1/2 right-1/3 w-[500px] h-[500px] bg-gradient-to-br from-yellow-600/10 to-amber-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }} />
+        {/* BRIGHT cyan/teal glows - VERY VISIBLE! */}
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-cyan-500/30 to-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-0 right-1/4 w-[550px] h-[550px] bg-gradient-to-br from-teal-500/25 to-emerald-500/25 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
+        <div className="absolute top-1/2 right-1/3 w-[500px] h-[500px] bg-gradient-to-br from-sky-500/20 to-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }} />
         
-        {/* Subtle noise texture for depth */}
-        <div className="absolute inset-0 opacity-[0.015]" style={{
-          backgroundImage: 'radial-gradient(circle, rgba(251, 146, 60, 0.1) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
+        {/* Grid pattern for extra visibility */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'linear-gradient(cyan 1px, transparent 1px), linear-gradient(90deg, cyan 1px, transparent 1px)',
+          backgroundSize: '50px 50px'
         }} />
         
-        {/* Sophisticated vignette */}
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-gray-900/20 to-black/50" />
+        {/* Vignette */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-slate-900/30 to-black/60" />
       </div>
 
       {/* Connection Status */}
@@ -144,9 +144,9 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="fixed bottom-4 text-xs text-amber-400 font-semibold"
+        className="fixed bottom-4 text-xs text-cyan-400 font-bold"
       >
-        🔥 ORANGE THEME v2.0 - Built with precision and care
+        🌊 CYAN THEME v3.0 - You should SEE this color! 🌊
       </motion.div>
     </main>
   );
