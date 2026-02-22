@@ -29,7 +29,7 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
       className="w-full max-w-md px-4"
     >
       <div className="luxury-card space-y-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-full blur-3xl -z-0" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-full blur-3xl -z-0" />
         <div className="relative z-10">
         <div>
           <h2 className="text-3xl font-bold mb-2 text-white">Create Game</h2>

@@ -11,10 +11,10 @@
     @apply bg-gray-950 text-white antialiased;
   }
 
-  /* Custom Scrollbar Styling */
+  /* Custom Scrollbar Styling - Warm Amber Theme */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(99, 102, 241, 0.5) rgba(255, 255, 255, 0.05);
+    scrollbar-color: rgba(251, 146, 60, 0.5) rgba(255, 255, 255, 0.05);
   }
 
   /* Webkit browsers (Chrome, Safari, Edge) */
@@ -29,19 +29,19 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.6), rgba(147, 51, 234, 0.6));
+    background: linear-gradient(180deg, rgba(251, 146, 60, 0.6), rgba(249, 115, 22, 0.6));
     border-radius: 10px;
     border: 2px solid rgba(255, 255, 255, 0.05);
     transition: all 0.3s ease;
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.8), rgba(147, 51, 234, 0.8));
+    background: linear-gradient(180deg, rgba(251, 146, 60, 0.8), rgba(249, 115, 22, 0.8));
     border-color: rgba(255, 255, 255, 0.1);
   }
 
   *::-webkit-scrollbar-thumb:active {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 1), rgba(147, 51, 234, 1));
+    background: linear-gradient(180deg, rgba(251, 146, 60, 1), rgba(249, 115, 22, 1));
   }
 
   /* Scrollbar corner (where horizontal and vertical meet) */
@@ -56,7 +56,7 @@
   }
   
   .luxury-card {
-    @apply glass-effect rounded-2xl p-6 transition-all duration-300 shadow-2xl shadow-purple-950/30 hover:shadow-purple-900/40;
+    @apply glass-effect rounded-2xl p-6 transition-all duration-300 shadow-2xl shadow-orange-950/30 hover:shadow-orange-900/40;
   }
   
   .luxury-button {
@@ -66,8 +66,8 @@
   }
   
   .luxury-button-primary {
-    @apply luxury-button bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 \
-           text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/40;
+    @apply luxury-button bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 \
+           text-white shadow-lg shadow-orange-500/30 hover:shadow-orange-500/40;
   }
   
   .luxury-button-secondary {

@@ -46,10 +46,10 @@ export default function Lobby({
           className="inline-block mb-4"
         >
           <div className="relative luxury-card inline-block">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-2xl" />
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-2xl" />
             <div className="relative">
               <p className="text-sm text-slate-400 mb-1">Game Code</p>
-              <p className="text-4xl font-bold tracking-widest bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <p className="text-4xl font-bold tracking-widest bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
                 {session.code}
               </p>
             </div>
@@ -67,7 +67,7 @@ export default function Lobby({
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         {/* Players */}
         <div className="luxury-card relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-48 h-48 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl -z-0" />
+          <div className="absolute top-0 left-0 w-48 h-48 bg-gradient-to-br from-yellow-500/20 to-amber-500/20 rounded-full blur-3xl -z-0" />
           <div className="relative z-10">
             <PlayerList players={session.players} currentPlayerId={playerId} />
           </div>

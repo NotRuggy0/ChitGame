@@ -25,7 +25,7 @@ export default function JoinGame({ onJoinGame, onBack }: JoinGameProps) {
       className="w-full max-w-md px-4"
     >
       <div className="luxury-card space-y-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-full blur-3xl -z-0" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-3xl -z-0" />
         <div className="relative z-10">
         <div>
           <h2 className="text-3xl font-bold mb-2 text-white">Join Game</h2>

@@ -60,19 +60,19 @@ export default function Home() {
       {/* Navigation Bar - Always visible */}
       <Navbar showLogo={true} />
 
-      {/* Premium Dark Background with Sophisticated Gradients */}
+      {/* Premium Dark Background with Warm Amber Gradients */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         {/* Deep sophisticated gradient base */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950" />
         
-        {/* Elegant purple accent glows - more subtle and refined */}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-indigo-600/15 to-purple-600/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
-        <div className="absolute bottom-0 right-1/4 w-[550px] h-[550px] bg-gradient-to-br from-violet-600/12 to-fuchsia-600/12 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }} />
-        <div className="absolute top-1/2 right-1/3 w-[500px] h-[500px] bg-gradient-to-br from-purple-600/10 to-pink-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }} />
+        {/* Warm amber accent glows - energetic yet sophisticated */}
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-amber-600/15 to-orange-600/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
+        <div className="absolute bottom-0 right-1/4 w-[550px] h-[550px] bg-gradient-to-br from-orange-600/12 to-red-600/12 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '3s' }} />
+        <div className="absolute top-1/2 right-1/3 w-[500px] h-[500px] bg-gradient-to-br from-yellow-600/10 to-amber-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '14s', animationDelay: '6s' }} />
         
         {/* Subtle noise texture for depth */}
         <div className="absolute inset-0 opacity-[0.015]" style={{
-          backgroundImage: 'radial-gradient(circle, rgba(139, 92, 246, 0.1) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, rgba(251, 146, 60, 0.1) 1px, transparent 1px)',
           backgroundSize: '40px 40px'
         }} />
         

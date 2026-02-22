@@ -24,7 +24,7 @@ export default function Navbar({ showLogo = true }: NavbarProps) {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-950/90 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-purple-900/10">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-950/90 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-orange-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -143,7 +143,7 @@ export default function Navbar({ showLogo = true }: NavbarProps) {
               {/* Modal Content */}
               {activeModal === 'about' && (
                 <div className="pr-8">
-                  <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
                     About Chit Game
                   </h2>
                   <div className="space-y-4 text-slate-300">
@@ -188,21 +188,21 @@ export default function Navbar({ showLogo = true }: NavbarProps) {
 
               {activeModal === 'howto' && (
                 <div className="pr-8">
-                  <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
                     How to Play
                   </h2>
                   <div className="space-y-6 text-slate-300">
                     {/* Host Instructions */}
-                    <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/30 rounded-xl p-5">
+                    <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-orange-500/30 rounded-xl p-5">
                       <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
-                        <svg className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                         </svg>
                         For Hosts
                       </h3>
                       <ol className="space-y-3 text-sm">
                         <li className="flex gap-3">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center text-xs font-bold">1</span>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center text-xs font-bold">1</span>
                           <div>
                             <strong className="text-white">Create a Game:</strong> Click "Create New Game" and enter your name and max players (2-20)
                           </div>
