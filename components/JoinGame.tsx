@@ -24,17 +24,15 @@ export default function JoinGame({ onJoinGame, onBack }: JoinGameProps) {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md px-4"
     >
-      <div className="luxury-card space-y-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-3xl -z-0" />
-        <div className="relative z-10">
+      <div className="luxury-card space-y-6 wave-glow">
         <div>
-          <h2 className="text-3xl font-bold mb-2 text-white">Join Game</h2>
-          <p className="text-slate-300">Enter your details to join</p>
+          <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-cyan-200 to-teal-300 bg-clip-text text-transparent">Join Game</h2>
+          <p className="text-slate-400">Enter your details to join</p>
         </div>
 
         <div className="space-y-5">
           <div>
-            <label className="block text-sm font-medium mb-2 text-slate-300">
+            <label className="block text-sm font-medium mb-2 text-cyan-300/80">
               Game Code
             </label>
             <input
@@ -48,7 +46,7 @@ export default function JoinGame({ onJoinGame, onBack }: JoinGameProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-slate-300">
+            <label className="block text-sm font-medium mb-2 text-cyan-300/80">
               Display Name
             </label>
             <input
@@ -62,7 +60,7 @@ export default function JoinGame({ onJoinGame, onBack }: JoinGameProps) {
           </div>
         </div>
 
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-3 mt-8">
           <button
             onClick={onBack}
             className="luxury-button-secondary flex-1"
@@ -76,7 +74,6 @@ export default function JoinGame({ onJoinGame, onBack }: JoinGameProps) {
           >
             Join Session
           </button>
-        </div>
         </div>
       </div>
     </motion.div>

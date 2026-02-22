@@ -60,24 +60,32 @@ export default function Home() {
       {/* Navigation Bar - Always visible */}
       <Navbar showLogo={true} />
 
-      {/* BRAND NEW VIBRANT CYAN-TEAL BACKGROUND - SUPER VISIBLE! */}
+      {/* Minimal Cyan Wave Background with Subtle Glows */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        {/* Vibrant gradient base */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-cyan-950 to-teal-950" />
+        {/* Deep minimal base */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/50" />
         
-        {/* BRIGHT cyan/teal glows - VERY VISIBLE! */}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-cyan-500/30 to-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute bottom-0 right-1/4 w-[550px] h-[550px] bg-gradient-to-br from-teal-500/25 to-emerald-500/25 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
-        <div className="absolute top-1/2 right-1/3 w-[500px] h-[500px] bg-gradient-to-br from-sky-500/20 to-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }} />
+        {/* Subtle cyan wave glows - organic floating orbs */}
+        <div className="absolute top-[10%] left-[15%] w-[500px] h-[500px] bg-gradient-to-br from-cyan-500/12 to-teal-500/8 rounded-full blur-3xl animate-wave-pulse" />
+        <div className="absolute bottom-[15%] right-[20%] w-[600px] h-[600px] bg-gradient-to-br from-teal-400/10 to-cyan-500/8 rounded-full blur-3xl animate-wave-pulse" style={{ animationDelay: '2s', animationDuration: '10s' }} />
+        <div className="absolute top-[45%] right-[10%] w-[450px] h-[450px] bg-gradient-to-br from-cyan-400/8 to-sky-500/6 rounded-full blur-3xl animate-wave-pulse" style={{ animationDelay: '4s', animationDuration: '12s' }} />
         
-        {/* Grid pattern for extra visibility */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: 'linear-gradient(cyan 1px, transparent 1px), linear-gradient(90deg, cyan 1px, transparent 1px)',
-          backgroundSize: '50px 50px'
+        {/* Subtle wave pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.015]" style={{
+          backgroundImage: `
+            radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(20, 184, 166, 0.1) 0%, transparent 50%)
+          `
         }} />
         
-        {/* Vignette */}
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-slate-900/30 to-black/60" />
+        {/* Minimal grid texture */}
+        <div className="absolute inset-0 opacity-[0.008]" style={{
+          backgroundImage: 'linear-gradient(rgba(6, 182, 212, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.3) 1px, transparent 1px)',
+          backgroundSize: '80px 80px'
+        }} />
+        
+        {/* Soft vignette for depth */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-slate-950/60" />
       </div>
 
       {/* Connection Status */}
@@ -85,9 +93,9 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed top-4 right-4 bg-white/10 backdrop-blur-xl px-4 py-2 rounded-lg text-sm text-slate-300 flex items-center gap-2 border border-white/20 shadow-lg"
+          className="fixed top-4 right-4 bg-slate-800/40 backdrop-blur-xl px-4 py-2 rounded-2xl text-sm text-cyan-300/80 flex items-center gap-2 border border-cyan-500/20 shadow-[0_4px_24px_rgba(6,182,212,0.1)]"
         >
-          <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
+          <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
           Connecting...
         </motion.div>
       )}
@@ -139,14 +147,14 @@ export default function Home() {
         )}
       </div>
 
-      {/* Footer */}
+      {/* Minimal Footer */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="fixed bottom-4 text-xs text-cyan-400 font-bold"
+        transition={{ delay: 0.8 }}
+        className="fixed bottom-6 text-xs text-cyan-400/60 font-light tracking-wide"
       >
-        🌊 CYAN THEME v3.0 - You should SEE this color! 🌊
+        Cyan Wave Theme
       </motion.div>
     </main>
   );

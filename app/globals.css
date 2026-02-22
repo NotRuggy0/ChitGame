@@ -4,81 +4,119 @@
 
 @layer base {
   * {
-    @apply border-slate-700;
+    @apply border-cyan-900/20;
   }
   
   body {
-    @apply bg-gray-950 text-white antialiased;
+    @apply bg-slate-950 text-slate-100 antialiased;
   }
 
-  /* Custom Scrollbar Styling - BRIGHT CYAN THEME */
+  /* Minimal Cyan Wave Scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(6, 182, 212, 0.7) rgba(255, 255, 255, 0.05);
+    scrollbar-color: rgba(6, 182, 212, 0.4) rgba(8, 145, 178, 0.05);
   }
 
-  /* Webkit browsers (Chrome, Safari, Edge) */
+  /* Webkit browsers - Subtle cyan glow */
   *::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
   }
 
   *::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(8, 145, 178, 0.03);
     border-radius: 10px;
   }
 
   *::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(6, 182, 212, 0.8), rgba(20, 184, 166, 0.8));
+    background: linear-gradient(180deg, rgba(6, 182, 212, 0.3), rgba(20, 184, 166, 0.3));
     border-radius: 10px;
-    border: 2px solid rgba(6, 182, 212, 0.3);
+    border: 1px solid rgba(6, 182, 212, 0.1);
     transition: all 0.3s ease;
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(6, 182, 212, 1), rgba(20, 184, 166, 1));
-    border-color: rgba(6, 182, 212, 0.5);
+    background: linear-gradient(180deg, rgba(6, 182, 212, 0.5), rgba(20, 184, 166, 0.5));
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.2);
   }
 
   *::-webkit-scrollbar-thumb:active {
-    background: linear-gradient(180deg, rgb(6, 182, 212), rgb(20, 184, 166));
-    box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+    background: linear-gradient(180deg, rgba(6, 182, 212, 0.6), rgba(20, 184, 166, 0.6));
   }
 
-  /* Scrollbar corner (where horizontal and vertical meet) */
   *::-webkit-scrollbar-corner {
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
   }
 }
 
 @layer utilities {
+  /* Minimal Glass with Subtle Cyan Glow */
   .glass-effect {
-    @apply bg-white/10 backdrop-blur-xl border border-white/20;
+    @apply bg-slate-900/40 backdrop-blur-2xl border border-cyan-500/10;
   }
   
+  /* Wave-inspired Card with Subtle Glow */
   .luxury-card {
-    @apply glass-effect rounded-2xl p-6 transition-all duration-300 shadow-2xl shadow-cyan-500/20 hover:shadow-cyan-400/30 border border-cyan-500/10;
+    @apply glass-effect rounded-3xl p-8 transition-all duration-500
+           shadow-[0_8px_32px_rgba(6,182,212,0.08)]
+           hover:shadow-[0_8px_48px_rgba(6,182,212,0.15)]
+           hover:border-cyan-400/20
+           relative;
   }
   
+  /* Minimal Button Base */
   .luxury-button {
-    @apply px-6 py-3 rounded-xl font-medium transition-all duration-200 
-           disabled:opacity-50 disabled:cursor-not-allowed
-           active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/30;
+    @apply px-6 py-3 rounded-2xl font-medium transition-all duration-300 
+           disabled:opacity-40 disabled:cursor-not-allowed
+           active:scale-[0.98] focus:outline-none 
+           focus:ring-2 focus:ring-cyan-400/20 focus:ring-offset-2 focus:ring-offset-transparent;
   }
   
+  /* Primary Button - Cyan Wave Glow */
   .luxury-button-primary {
-    @apply luxury-button bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 \
-           text-white shadow-lg shadow-cyan-500/40 hover:shadow-cyan-400/60;
+    @apply luxury-button 
+           bg-gradient-to-r from-cyan-500/90 to-teal-500/90 
+           hover:from-cyan-400 hover:to-teal-400
+           text-white font-semibold
+           shadow-[0_4px_24px_rgba(6,182,212,0.25)]
+           hover:shadow-[0_8px_32px_rgba(6,182,212,0.35)]
+           border border-cyan-400/20;
   }
   
+  /* Secondary Button - Minimal with Cyan Accent */
   .luxury-button-secondary {
-    @apply luxury-button bg-white/10 hover:bg-white/20 text-white border border-white/20;
+    @apply luxury-button 
+           bg-slate-800/40 hover:bg-slate-700/50
+           text-cyan-50 border border-cyan-500/20
+           hover:border-cyan-400/30
+           shadow-[0_2px_16px_rgba(6,182,212,0.08)]
+           hover:shadow-[0_4px_24px_rgba(6,182,212,0.12)];
   }
   
+  /* Minimal Input with Cyan Focus */
   .luxury-input {
-    @apply w-full px-4 py-3 bg-white/10 border border-white/20 
-           rounded-xl text-white placeholder-slate-400
-           focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400
-           transition-all duration-200;
+    @apply w-full px-5 py-3.5 
+           bg-slate-900/50 border border-cyan-500/15
+           rounded-2xl text-slate-100 placeholder-slate-500
+           focus:outline-none focus:ring-2 focus:ring-cyan-400/30 
+           focus:border-cyan-400/40 focus:bg-slate-900/70
+           transition-all duration-300
+           shadow-[inset_0_2px_8px_rgba(0,0,0,0.2)];
+  }
+  
+  /* Cyan Wave Glow Effect */
+  .wave-glow {
+    @apply relative;
+  }
+  
+  .wave-glow::before {
+    content: '';
+    @apply absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500;
+    background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15), transparent 70%);
+    filter: blur(20px);
+  }
+  
+  .wave-glow:hover::before {
+    @apply opacity-100;
   }
 }

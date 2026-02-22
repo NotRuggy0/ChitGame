@@ -45,70 +45,60 @@ export default function Lobby({
           animate={{ scale: 1, opacity: 1 }}
           className="inline-block mb-4"
         >
-          <div className="relative luxury-card inline-block">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-2xl" />
+          <div className="relative luxury-card inline-block wave-glow px-10 py-6">
             <div className="relative">
-              <p className="text-sm text-slate-400 mb-1">Game Code</p>
-              <p className="text-4xl font-bold tracking-widest bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+              <p className="text-sm text-cyan-400/60 mb-2 font-light tracking-wide">Game Code</p>
+              <p className="text-5xl font-bold tracking-[0.3em] bg-gradient-to-r from-cyan-300 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
                 {session.code}
               </p>
             </div>
           </div>
         </motion.div>
         
-        <div className="flex items-center justify-center gap-4 text-sm text-slate-400">
-          <span>{session.players.length} / {session.maxPlayers} players</span>
-          <span>•</span>
-          <span>{session.chits.length} roles</span>
+        <div className="flex items-center justify-center gap-4 text-sm text-slate-500">
+          <span className="text-cyan-400/70">{session.players.length} / {session.maxPlayers} players</span>
+          <span className="text-cyan-500/30">•</span>
+          <span className="text-cyan-400/70">{session.chits.length} roles</span>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         {/* Players */}
-        <div className="luxury-card relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-48 h-48 bg-gradient-to-br from-yellow-500/20 to-amber-500/20 rounded-full blur-3xl -z-0" />
-          <div className="relative z-10">
-            <PlayerList players={session.players} currentPlayerId={playerId} />
-          </div>
+        <div className="luxury-card wave-glow">
+          <PlayerList players={session.players} currentPlayerId={playerId} />
         </div>
 
         {/* Chits - Host Only */}
         {isHost && (
-          <div className="luxury-card relative overflow-hidden">
-            <div className="absolute bottom-0 right-0 w-56 h-56 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-3xl -z-0" />
-            <div className="relative z-10">
-              <ChitManager
-                chits={session.chits}
-                onAddChit={onAddChit}
-                onEditChit={onEditChit}
-                onRemoveChit={onRemoveChit}
-              />
-            </div>
+          <div className="luxury-card wave-glow">
+            <ChitManager
+              chits={session.chits}
+              onAddChit={onAddChit}
+              onEditChit={onEditChit}
+              onRemoveChit={onRemoveChit}
+            />
           </div>
         )}
 
         {/* Player View - Non-host */}
         {!isHost && (
-          <div className="luxury-card relative overflow-hidden">
-            <div className="absolute bottom-0 right-0 w-56 h-56 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-3xl -z-0" />
-            <div className="relative z-10">
-            <h3 className="text-lg font-semibold mb-4 text-white">Roles ({session.chits.length})</h3>
-            <div className="space-y-2">
+          <div className="luxury-card wave-glow">
+            <h3 className="text-lg font-semibold mb-4 text-cyan-200">Roles ({session.chits.length})</h3>
+            <div className="space-y-3">
               {session.chits.map((chit) => (
-                <div key={chit.id} className="p-4 bg-white/5 rounded-xl border border-white/10">
-                  <p className="font-medium text-white">{chit.roleName}</p>
+                <div key={chit.id} className="p-4 bg-slate-800/30 rounded-2xl border border-cyan-500/10 hover:border-cyan-500/20 transition-all duration-300">
+                  <p className="font-medium text-cyan-100">{chit.roleName}</p>
                   {chit.description && (
-                    <p className="text-sm text-slate-300 mt-1">{chit.description}</p>
+                    <p className="text-sm text-slate-400 mt-1">{chit.description}</p>
                   )}
                 </div>
               ))}
               {session.chits.length === 0 && (
-                <p className="text-center py-8 text-slate-400">
+                <p className="text-center py-12 text-slate-500">
                   Waiting for host to add roles...
                 </p>
               )}
-            </div>
             </div>
           </div>
         )}
@@ -119,7 +109,7 @@ export default function Lobby({
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 p-4 bg-amber-500/20 border border-amber-500/40 rounded-xl text-amber-300 text-sm text-center font-medium backdrop-blur-sm"
+          className="mb-4 p-4 bg-amber-500/10 border border-amber-400/30 rounded-2xl text-amber-300/90 text-sm text-center font-medium backdrop-blur-xl"
         >
           ⚠️ Role count ({session.chits.length}) must equal player count ({session.players.length})
         </motion.div>
@@ -129,7 +119,7 @@ export default function Lobby({
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 p-4 bg-blue-500/20 border border-blue-500/40 rounded-xl text-blue-300 text-sm text-center font-medium backdrop-blur-sm"
+          className="mb-4 p-4 bg-cyan-500/10 border border-cyan-400/30 rounded-2xl text-cyan-300/90 text-sm text-center font-medium backdrop-blur-xl"
         >
           Waiting for all players to ready up...
         </motion.div>

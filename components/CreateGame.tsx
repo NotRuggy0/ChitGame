@@ -28,17 +28,16 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md px-4"
     >
-      <div className="luxury-card space-y-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-full blur-3xl -z-0" />
-        <div className="relative z-10">
+      <div className="luxury-card space-y-6 wave-glow">
         <div>
-          <h2 className="text-3xl font-bold mb-2 text-white">Create Game</h2>
-          <p className="text-slate-300">Set up a new session</p>
+          <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-cyan-200 to-teal-300 bg-clip-text text-transparent">Create Game</h2>
+          <p className="text-slate-400">Set up a new session</p>
         </div>
 
         <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <label className="block text-sm font-medium mb-2 text-slate-300">
+            <label className="block text-sm font-medium mb-2 text-cyan-300/80">
               Your Name
             </label>
             <input
@@ -53,7 +52,7 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-slate-300">
+            <label className="block text-sm font-medium mb-2 text-cyan-300/80">
               Maximum Players
             </label>
             <input
@@ -62,23 +61,23 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
               max="20"
               value={maxPlayers}
               onChange={(e) => setMaxPlayers(e.target.value)}
-              className={`luxury-input ${showError ? 'border-2 border-red-500 focus:ring-red-500' : ''}`}
+              className={`luxury-input ${showError ? 'border-red-400/50 focus:ring-red-400/30 focus:border-red-400/50' : ''}`}
               placeholder="2-20"
             />
             {showError && (
-              <p className="text-sm text-red-400 mt-2 font-medium">
+              <p className="text-sm text-red-400/90 mt-2 font-medium">
                 ⚠️ Player count must be between 2 and 20
               </p>
             )}
             {!showError && (
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs text-slate-500 mt-2">
                 Choose between 2-20 players
               </p>
             )}
           </div>
         </div>
 
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-3 mt-8">
           <button
             onClick={onBack}
             className="luxury-button-secondary flex-1"
@@ -92,7 +91,6 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
           >
             Create Session
           </button>
-        </div>
         </div>
       </div>
     </motion.div>

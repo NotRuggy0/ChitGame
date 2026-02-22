@@ -52,11 +52,11 @@ export default function ChitManager({ chits, onAddChit, onEditChit, onRemoveChit
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">Roles</h3>
+        <h3 className="text-lg font-semibold text-cyan-200">Roles</h3>
         {!isAdding && !editingId && (
           <button
             onClick={() => setIsAdding(true)}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
+            className="px-4 py-2 bg-gradient-to-r from-cyan-500/80 to-teal-500/80 hover:from-cyan-500 hover:to-teal-500 text-white rounded-xl text-sm font-semibold transition-all duration-300 shadow-[0_2px_16px_rgba(6,182,212,0.2)] hover:shadow-[0_4px_24px_rgba(6,182,212,0.3)]"
           >
             Add Role
           </button>
@@ -69,7 +69,7 @@ export default function ChitManager({ chits, onAddChit, onEditChit, onRemoveChit
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="luxury-card space-y-3"
+            className="p-5 bg-slate-800/40 border border-cyan-500/15 rounded-2xl space-y-3"
           >
             <input
               type="text"
@@ -111,23 +111,23 @@ export default function ChitManager({ chits, onAddChit, onEditChit, onRemoveChit
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="luxury-card group hover:border-luxury-grey-light"
+            className="p-5 bg-slate-800/30 border border-cyan-500/10 rounded-2xl group hover:border-cyan-500/25 hover:bg-slate-800/40 transition-all duration-300"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-white truncate">
+                <h4 className="font-semibold text-cyan-100 truncate">
                   {chit.roleName}
                 </h4>
                 {chit.description && (
-                  <p className="text-sm text-slate-300 mt-1 line-clamp-2">
+                  <p className="text-sm text-slate-400 mt-1 line-clamp-2">
                     {chit.description}
                   </p>
                 )}
               </div>
-              <div className="flex gap-2 ml-3 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex gap-1 ml-3 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => startEdit(chit)}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-300"
+                  className="p-2 hover:bg-cyan-500/10 rounded-lg transition-colors text-cyan-400"
                   title="Edit"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -136,7 +136,7 @@ export default function ChitManager({ chits, onAddChit, onEditChit, onRemoveChit
                 </button>
                 <button
                   onClick={() => onRemoveChit(chit.id)}
-                  className="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
+                  className="p-2 hover:bg-red-500/20 text-red-400/80 hover:text-red-400 rounded-lg transition-colors"
                   title="Remove"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -150,11 +150,11 @@ export default function ChitManager({ chits, onAddChit, onEditChit, onRemoveChit
       </AnimatePresence>
 
       {chits.length === 0 && !isAdding && !editingId && (
-        <div className="text-center py-12 text-slate-400">
-          <svg className="w-16 h-16 mx-auto mb-3 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="text-center py-12 text-slate-500">
+          <svg className="w-16 h-16 mx-auto mb-3 opacity-20 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p className="font-medium text-white">No roles added yet</p>
+          <p className="font-medium text-cyan-300/70">No roles added yet</p>
           <p className="text-sm mt-1">Click "Add Role" to get started</p>
         </div>
       )}
