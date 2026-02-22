@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --theme-primary: rgb(6, 182, 212);
+  --theme-secondary: rgb(20, 184, 166);
+  --theme-accent: rgb(34, 211, 238);
+  --theme-glow: rgba(6, 182, 212, 0.3);
+}
+
 @layer base {
   * {
     @apply border-cyan-900/20;
@@ -9,6 +16,30 @@
   
   body {
     @apply bg-slate-950 text-slate-100 antialiased;
+  }
+  
+  /* Perspective for 3D transforms */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  /* Backface hidden for flip cards */
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  /* Screen reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 
   /* Minimal Cyan Wave Scrollbar */

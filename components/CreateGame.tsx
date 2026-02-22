@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useRipple } from './RippleEffect';
 
 interface CreateGameProps {
   onCreateGame: (maxPlayers: number, hostName: string) => void;

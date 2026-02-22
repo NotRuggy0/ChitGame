@@ -4,6 +4,10 @@ import { motion } from 'framer-motion';
 import type { SessionSnapshot } from '../types';
 import PlayerList from './PlayerList';
 import ChitManager from './ChitManager';
+import QRCodeShare from './QRCodeShare';
+import CopyButton from './CopyButton';
+import HostControls from './HostControls';
+import RolePresetSelector from './RolePresetSelector';
 
 interface LobbyProps {
   session: SessionSnapshot;
@@ -55,6 +59,19 @@ export default function Lobby({
           </div>
         </motion.div>
         
+        {/* Quick Actions */}
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <CopyButton text={session.code} label="Copy Code" />
+          <QRCodeShare gameCode={session.code} />
+          {isHost && (
+            <HostControls
+              onKickPlayer={(id) => console.log('Kick player:', id)}
+              onRestartGame={() => window.location.reload()}
+              players={session.players.filter(p => p.id !== playerId).map(p => ({ id: p.id, name: p.displayName }))}
+            />
+          )}
+        </div>
+        
         <div className="flex items-center justify-center gap-4 text-sm text-slate-500">
           <span className="text-cyan-400/70">{session.players.length} / {session.maxPlayers} players</span>
           <span className="text-cyan-500/30">•</span>
@@ -72,6 +89,17 @@ export default function Lobby({
         {/* Chits - Host Only */}
         {isHost && (
           <div className="luxury-card wave-glow">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-cyan-200">Roles</h3>
+              <RolePresetSelector 
+                playerCount={session.players.length}
+                onLoadPreset={(roles) => {
+                  // Clear existing chits and add preset roles
+                  session.chits.forEach(chit => onRemoveChit(chit.id));
+                  roles.forEach(role => onAddChit(role.name, role.description));
+                }}
+              />
+            </div>
             <ChitManager
               chits={session.chits}
               onAddChit={onAddChit}

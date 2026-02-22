@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWebSocket } from '../hooks/useWebSocket';
+import { useTheme } from '../hooks/useTheme';
 import HomePage from '../components/HomePage';
 import CreateGame from '../components/CreateGame';
 import JoinGame from '../components/JoinGame';
@@ -9,12 +10,22 @@ import Lobby from '../components/Lobby';
 import GameResult from '../components/GameResult';
 import ErrorToast from '../components/ErrorToast';
 import Navbar from '../components/Navbar';
-import { motion } from 'framer-motion';
+import ParticleEffect from '../components/ParticleEffect';
+import ConfettiEffect from '../components/ConfettiEffect';
+import CountdownTimer from '../components/CountdownTimer';
+import ThemeSwitcher from '../components/ThemeSwitcher';
+import GameHistory from '../components/GameHistory';
+import { motion, AnimatePresence } from 'framer-motion';
+import { saveGameToHistory } from '../utils/gameHistory';
 
 type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game';
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>('home');
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showCountdown, setShowCountdown] = useState(false);
+  const { theme, changeTheme } = useTheme();
+  
   const {
     isConnected,
     session,
@@ -41,6 +52,17 @@ export default function Home() {
     setScreen('lobby');
   };
 
+  const handleStartGame = () => {
+    setShowCountdown(true);
+  };
+
+  const handleCountdownComplete = () => {
+    setShowCountdown(false);
+    startGame();
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 3000);
+  };
+
   const handleLeaveGame = () => {
     leaveGame();
     setScreen('home');
@@ -49,6 +71,20 @@ export default function Home() {
   const handleBack = () => {
     setScreen('home');
   };
+
+  // Save game to history when assigned a chit
+  useEffect(() => {
+    if (assignedChit && session && playerId) {
+      saveGameToHistory({
+        id: session.code + '-' + Date.now(),
+        code: session.code,
+        date: new Date().toISOString(),
+        playerCount: session.players.length,
+        role: assignedChit.roleName,
+        isHost: session.hostId === playerId,
+      });
+    }
+  }, [assignedChit, session, playerId]);
 
   // Auto-switch to game screen when chit is assigned
   if (assignedChit && screen !== 'game') {
@@ -60,7 +96,24 @@ export default function Home() {
       {/* Navigation Bar - Always visible */}
       <Navbar showLogo={true} />
 
-      {/* Minimal Cyan Wave Background with Subtle Glows */}
+      {/* Particle Effects */}
+      <ParticleEffect count={25} />
+
+      {/* Confetti on Game Start */}
+      <ConfettiEffect trigger={showConfetti} />
+
+      {/* Countdown Timer */}
+      <AnimatePresence>
+        {showCountdown && <CountdownTimer onComplete={handleCountdownComplete} />}
+      </AnimatePresence>
+
+      {/* Theme Switcher & Game History - Top Right */}
+      <div className="fixed top-20 right-4 flex gap-2 z-30">
+        <GameHistory />
+        <ThemeSwitcher currentTheme={theme} onThemeChange={changeTheme} />
+      </div>
+
+      {/* Dynamic Themed Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         {/* Deep minimal base */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/50" />
@@ -134,7 +187,7 @@ export default function Home() {
             onAddChit={addChit}
             onEditChit={editChit}
             onRemoveChit={removeChit}
-            onStartGame={startGame}
+            onStartGame={handleStartGame}
             onLeaveGame={handleLeaveGame}
           />
         )}
