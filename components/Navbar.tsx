@@ -49,7 +49,7 @@ export default function Navbar({ showLogo = true }: NavbarProps) {
                 How to Play
               </button>
               <a
-                href="https://github.com"
+                href="https://github.com/NotRuggy0/ChitGame"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-300 hover:text-white transition-colors text-sm font-medium"
@@ -98,7 +98,7 @@ export default function Navbar({ showLogo = true }: NavbarProps) {
                   How to Play
                 </button>
                 <a
-                  href="https://github.com"
+                  href="https://github.com/NotRuggy0/ChitGame"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full text-left px-4 py-3 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
