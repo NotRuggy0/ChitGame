@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Logo from './Logo';
-import { useRipple } from './RippleEffect';
 
 interface HomePageProps {
   onCreateGame: () => void;

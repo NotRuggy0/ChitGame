@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useRipple } from './RippleEffect';
 
 interface CreateGameProps {
   onCreateGame: (maxPlayers: number, hostName: string) => void;
@@ -10,16 +9,12 @@ interface CreateGameProps {
 }
 
 export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
-  const [maxPlayers, setMaxPlayers] = useState('4');
+  const [maxPlayers, setMaxPlayers] = useState(10);
   const [hostName, setHostName] = useState('');
 
-  const playerCount = parseInt(maxPlayers) || 0;
-  const isValidPlayerCount = playerCount >= 2 && playerCount <= 20;
-  const showError = maxPlayers !== '' && !isValidPlayerCount;
-
   const handleCreate = () => {
-    if (isValidPlayerCount && hostName.trim()) {
-      onCreateGame(playerCount, hostName.trim());
+    if (hostName.trim()) {
+      onCreateGame(maxPlayers, hostName.trim());
     }
   };
 
@@ -53,44 +48,41 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
 
           <div>
             <label className="block text-sm font-medium mb-2 text-cyan-300/80">
-              Maximum Players
+              Maximum Players: {maxPlayers}
             </label>
             <input
-              type="number"
-              min="1"
+              type="range"
+              min="2"
               max="20"
               value={maxPlayers}
-              onChange={(e) => setMaxPlayers(e.target.value)}
-              className={`luxury-input ${showError ? 'border-red-400/50 focus:ring-red-400/30 focus:border-red-400/50' : ''}`}
-              placeholder="2-20"
+              onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
+              className="w-full h-2 bg-slate-800/60 rounded-lg appearance-none cursor-pointer accent-cyan-500"
             />
-            {showError && (
-              <p className="text-sm text-red-400/90 mt-2 font-medium">
-                ⚠️ Player count must be between 2 and 20
-              </p>
-            )}
-            {!showError && (
-              <p className="text-xs text-slate-500 mt-2">
-                Choose between 2-20 players
-              </p>
-            )}
+            <div className="flex justify-between text-xs text-slate-500 mt-1">
+              <span>2</span>
+              <span>20</span>
+            </div>
           </div>
         </div>
 
         <div className="flex gap-3 mt-8">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={onBack}
             className="luxury-button-secondary flex-1"
           >
             Back
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleCreate}
-            disabled={!isValidPlayerCount || !hostName.trim()}
+            disabled={!hostName.trim()}
             className="luxury-button-primary flex-1"
           >
             Create Session
-          </button>
+          </motion.button>
         </div>
       </div>
     </motion.div>
