@@ -47,20 +47,28 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-cyan-300/80">
-              Maximum Players: {maxPlayers}
+            <label className="block text-sm font-medium mb-3 text-cyan-300/80">
+              Maximum Players: <span className="text-cyan-400 font-bold text-lg">{maxPlayers}</span>
             </label>
-            <input
-              type="range"
-              min="2"
-              max="20"
-              value={maxPlayers}
-              onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-800/60 rounded-lg appearance-none cursor-pointer accent-cyan-500"
-            />
-            <div className="flex justify-between text-xs text-slate-500 mt-1">
-              <span>2</span>
-              <span>20</span>
+            <div className="py-2" style={{ position: 'relative', zIndex: 30 }}>
+              <input
+                type="range"
+                min="2"
+                max="20"
+                value={maxPlayers}
+                onChange={(e) => setMaxPlayers(parseInt(e.target.value))}
+                style={{ 
+                  width: '100%',
+                  cursor: 'pointer',
+                  pointerEvents: 'auto',
+                  zIndex: 30,
+                  position: 'relative'
+                }}
+              />
+            </div>
+            <div className="flex justify-between text-xs text-slate-500 mt-2">
+              <span className="text-slate-600">Min: 2</span>
+              <span className="text-slate-600">Max: 20</span>
             </div>
           </div>
         </div>
