@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRipple } from './RippleEffect';
 
 interface HostControlsProps {
   onKickPlayer: (playerId: string) => void;
@@ -14,7 +13,6 @@ export default function HostControls({ onKickPlayer, onRestartGame, players }: H
   const [isOpen, setIsOpen] = useState(false);
   const [showKickMenu, setShowKickMenu] = useState(false);
   const [showRestartConfirm, setShowRestartConfirm] = useState(false);
-  const { createRipple, RippleContainer } = useRipple();
 
   const handleKick = (playerId: string) => {
     onKickPlayer(playerId);
@@ -31,14 +29,10 @@ export default function HostControls({ onKickPlayer, onRestartGame, players }: H
   return (
     <div className="relative">
       <button
-        onClick={(e) => {
-          createRipple(e);
-          setIsOpen(!isOpen);
-        }}
-        className="relative overflow-hidden flex items-center gap-2 px-4 py-2 bg-slate-800/40 hover:bg-slate-700/50 text-cyan-300 rounded-xl border border-cyan-500/20 transition-all"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-4 py-2 bg-slate-800/40 hover:bg-slate-700/50 text-cyan-300 rounded-xl border border-cyan-500/20 transition-all"
         aria-label="Host controls"
       >
-        <RippleContainer />
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
         </svg>

@@ -40,6 +40,8 @@ export default function Home() {
     removeChit,
     startGame,
     leaveGame,
+    kickPlayer,
+    restartGame,
   } = useWebSocket();
 
   const handleCreateGame = (maxPlayers: number, hostName: string) => {
@@ -196,6 +198,8 @@ export default function Home() {
             onRemoveChit={removeChit}
             onStartGame={handleStartGame}
             onLeaveGame={handleLeaveGame}
+            onKickPlayer={kickPlayer}
+            onRestartGame={restartGame}
           />
         )}
 

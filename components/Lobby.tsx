@@ -18,6 +18,8 @@ interface LobbyProps {
   onRemoveChit: (chitId: string) => void;
   onStartGame: () => void;
   onLeaveGame: () => void;
+  onKickPlayer: (targetPlayerId: string) => void;
+  onRestartGame: () => void;
 }
 
 export default function Lobby({
@@ -29,6 +31,8 @@ export default function Lobby({
   onRemoveChit,
   onStartGame,
   onLeaveGame,
+  onKickPlayer,
+  onRestartGame,
 }: LobbyProps) {
   const isHost = session.hostId === playerId;
   const currentPlayer = session.players.find(p => p.id === playerId);
@@ -65,8 +69,8 @@ export default function Lobby({
           <QRCodeShare gameCode={session.code} />
           {isHost && (
             <HostControls
-              onKickPlayer={(id) => console.log('Kick player:', id)}
-              onRestartGame={() => window.location.reload()}
+              onKickPlayer={onKickPlayer}
+              onRestartGame={onRestartGame}
               players={session.players.filter(p => p.id !== playerId).map(p => ({ id: p.id, name: p.displayName }))}
             />
           )}

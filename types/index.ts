@@ -30,7 +30,9 @@ export type ClientMessage =
   | { type: 'edit_chit'; chitId: string; roleName: string; description?: string }
   | { type: 'remove_chit'; chitId: string }
   | { type: 'start_game' }
-  | { type: 'leave_game' };
+  | { type: 'leave_game' }
+  | { type: 'kick_player'; targetPlayerId: string }
+  | { type: 'restart_game' };
 
 export type ServerMessage =
   | { type: 'game_created'; code: string; playerId: string }
@@ -39,7 +41,9 @@ export type ServerMessage =
   | { type: 'game_started'; assignedChit: Chit }
   | { type: 'error'; message: string }
   | { type: 'player_left'; playerId: string }
-  | { type: 'host_changed'; newHostId: string };
+  | { type: 'host_changed'; newHostId: string }
+  | { type: 'player_kicked'; playerId: string }
+  | { type: 'game_restarted' };
 
 export interface SessionSnapshot {
   code: string;

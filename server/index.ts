@@ -312,6 +312,95 @@ function handleLeaveGame(playerId: string) {
   });
 }
 
+function handleKickPlayer(hostId: string, targetPlayerId: string) {
+  const sessionCode = playerToSession.get(hostId);
+  if (!sessionCode) return;
+
+  const session = sessions.get(sessionCode);
+  if (!session) return;
+
+  // Verify the requester is the host
+  if (session.hostId !== hostId) {
+    const ws = playerToSocket.get(hostId);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const error: ServerMessage = {
+        type: 'error',
+        message: 'Only the host can kick players',
+      };
+      ws.send(JSON.stringify(error));
+    }
+    return;
+  }
+
+  // Can't kick yourself
+  if (targetPlayerId === hostId) {
+    const ws = playerToSocket.get(hostId);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const error: ServerMessage = {
+        type: 'error',
+        message: 'You cannot kick yourself',
+      };
+      ws.send(JSON.stringify(error));
+    }
+    return;
+  }
+
+  // Notify the kicked player
+  const kickedWs = playerToSocket.get(targetPlayerId);
+  if (kickedWs && kickedWs.readyState === WebSocket.OPEN) {
+    const message: ServerMessage = {
+      type: 'error',
+      message: 'You have been kicked from the game',
+    };
+    kickedWs.send(JSON.stringify(message));
+  }
+
+  // Remove the player
+  handleLeaveGame(targetPlayerId);
+}
+
+function handleRestartGame(hostId: string) {
+  const sessionCode = playerToSession.get(hostId);
+  if (!sessionCode) return;
+
+  const session = sessions.get(sessionCode);
+  if (!session) return;
+
+  // Verify the requester is the host
+  if (session.hostId !== hostId) {
+    const ws = playerToSocket.get(hostId);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const error: ServerMessage = {
+        type: 'error',
+        message: 'Only the host can restart the game',
+      };
+      ws.send(JSON.stringify(error));
+    }
+    return;
+  }
+
+  // Reset game state
+  session.status = 'lobby';
+  session.chits = [];
+  
+  // Reset all players
+  session.players.forEach((player) => {
+    player.isReady = false;
+    player.assignedChit = undefined;
+  });
+
+  // Broadcast restart to all players
+  broadcastToSession(sessionCode, {
+    type: 'game_restarted',
+  });
+
+  // Send updated session
+  broadcastToSession(sessionCode, {
+    type: 'session_update',
+    session: getSessionSnapshot(session),
+  });
+}
+
 wss.on('connection', (ws: WebSocket) => {
   console.log('Client connected');
 
@@ -360,6 +449,18 @@ wss.on('connection', (ws: WebSocket) => {
           const playerId = Array.from(playerToSocket.entries())
             .find(([, socket]) => socket === ws)?.[0];
           if (playerId) handleLeaveGame(playerId);
+          break;
+        }
+        case 'kick_player': {
+          const hostId = Array.from(playerToSocket.entries())
+            .find(([, socket]) => socket === ws)?.[0];
+          if (hostId) handleKickPlayer(hostId, message.targetPlayerId);
+          break;
+        }
+        case 'restart_game': {
+          const hostId = Array.from(playerToSocket.entries())
+            .find(([, socket]) => socket === ws)?.[0];
+          if (hostId) handleRestartGame(hostId);
           break;
         }
       }

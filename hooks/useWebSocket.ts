@@ -46,6 +46,14 @@ export function useWebSocket() {
           case 'player_left':
             // Session update will follow
             break;
+          case 'player_kicked':
+            // Session update will follow
+            break;
+          case 'game_restarted':
+            // Reset local state
+            setAssignedChit(null);
+            // Session update will follow
+            break;
         }
       } catch (err) {
         console.error('Error parsing message:', err);
@@ -111,6 +119,16 @@ export function useWebSocket() {
     setAssignedChit(null);
   }, [send]);
 
+  const kickPlayer = useCallback((targetPlayerId: string) => {
+    send({ type: 'kick_player', targetPlayerId });
+  }, [send]);
+
+  const restartGame = useCallback(() => {
+    // Reset assigned chit and clear roles
+    setAssignedChit(null);
+    send({ type: 'restart_game' });
+  }, [send]);
+
   return {
     isConnected,
     session,
@@ -125,5 +143,7 @@ export function useWebSocket() {
     removeChit,
     startGame,
     leaveGame,
+    kickPlayer,
+    restartGame,
   };
 }
