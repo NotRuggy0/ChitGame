@@ -144,9 +144,9 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="fixed bottom-4 text-xs text-slate-400"
+        className="fixed bottom-4 text-xs text-amber-400 font-semibold"
       >
-        Built with precision and care
+        🔥 ORANGE THEME v2.0 - Built with precision and care
       </motion.div>
     </main>
   );

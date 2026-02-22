@@ -52,7 +52,7 @@ export default function Logo({ variant = 'full', className = '' }: LogoProps) {
         Chit Game
       </h1>
       <p className="text-slate-300 text-lg font-light">
-        Role assignment, refined
+        🔥 Warm Orange Theme Active! 🔥
       </p>
     </div>
   );
