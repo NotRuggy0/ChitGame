@@ -208,19 +208,19 @@ export default function Navbar({ showLogo = true }: NavbarProps) {
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center text-xs font-bold">2</span>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center text-xs font-bold">2</span>
                           <div>
                             <strong className="text-white">Share the Code:</strong> Give the 6-character code to your friends
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center text-xs font-bold">3</span>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center text-xs font-bold">3</span>
                           <div>
                             <strong className="text-white">Add Roles:</strong> Click "Add Role" to create roles (must match player count)
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center text-xs font-bold">4</span>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center text-xs font-bold">4</span>
                           <div>
                             <strong className="text-white">Start Game:</strong> When all players are ready and roles match, click "Start Game"
                           </div>
@@ -229,34 +229,34 @@ export default function Navbar({ showLogo = true }: NavbarProps) {
                     </div>
 
                     {/* Player Instructions */}
-                    <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-xl p-5">
+                    <div className="bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border border-amber-500/30 rounded-xl p-5">
                       <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
-                        <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         For Players
                       </h3>
                       <ol className="space-y-3 text-sm">
                         <li className="flex gap-3">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">1</span>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold">1</span>
                           <div>
                             <strong className="text-white">Join Game:</strong> Click "Join Game" on the home screen
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">2</span>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold">2</span>
                           <div>
                             <strong className="text-white">Enter Details:</strong> Type the game code and your display name
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">3</span>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold">3</span>
                           <div>
                             <strong className="text-white">Ready Up:</strong> Click "Ready Up" when you're ready to play
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">4</span>
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold">4</span>
                           <div>
                             <strong className="text-white">Get Your Role:</strong> Once the host starts, you'll see your private role!
                           </div>

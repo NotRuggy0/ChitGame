@@ -76,7 +76,7 @@ export default function Lobby({
         {/* Chits - Host Only */}
         {isHost && (
           <div className="luxury-card relative overflow-hidden">
-            <div className="absolute bottom-0 right-0 w-56 h-56 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-3xl -z-0" />
+            <div className="absolute bottom-0 right-0 w-56 h-56 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-3xl -z-0" />
             <div className="relative z-10">
               <ChitManager
                 chits={session.chits}
