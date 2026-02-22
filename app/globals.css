@@ -102,53 +102,118 @@
   
   /* Minimal Button Base */
   .luxury-button {
-    @apply px-6 py-3 rounded-2xl font-medium transition-all duration-300 
-           disabled:opacity-40 disabled:cursor-not-allowed
-           active:scale-[0.98] focus:outline-none 
-           focus:ring-2 focus:ring-cyan-400/20 focus:ring-offset-2 focus:ring-offset-transparent;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .luxury-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  
+  .luxury-button:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  
+  .luxury-button:focus {
+    box-shadow: 0 0 0 3px var(--theme-glow);
   }
   
   /* Primary Button - Dynamic Theme Glow */
   .luxury-button-primary {
-    @apply luxury-button 
-           text-white font-semibold
-           border border-cyan-400/20;
+    color: white;
+    font-weight: 600;
+    border: 1px solid;
+    border-color: var(--theme-accent);
+    border-opacity: 0.2;
     background: linear-gradient(to right, var(--theme-primary), var(--theme-secondary));
     box-shadow: 0 4px 24px var(--theme-glow);
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
   }
   
   .luxury-button-primary:hover:not(:disabled) {
     filter: brightness(1.1);
     box-shadow: 0 8px 32px var(--theme-glow);
+    transform: scale(1.02);
+  }
+  
+  .luxury-button-primary:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  
+  .luxury-button-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
   
   /* Secondary Button - Minimal with Theme Accent */
   .luxury-button-secondary {
-    @apply luxury-button 
-           bg-slate-800/40 hover:bg-slate-700/50
-           text-cyan-50;
-    border: 1px solid var(--theme-primary);
+    background: rgba(30, 41, 59, 0.4);
+    color: rgb(248, 250, 252);
+    border: 1px solid;
+    border-color: var(--theme-primary);
     border-opacity: 0.2;
     box-shadow: 0 2px 16px var(--theme-glow);
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
   }
   
   .luxury-button-secondary:hover:not(:disabled) {
+    background: rgba(51, 65, 85, 0.5);
     border-opacity: 0.3;
     box-shadow: 0 4px 24px var(--theme-glow);
+    transform: scale(1.02);
+  }
+  
+  .luxury-button-secondary:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  
+  .luxury-button-secondary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
   
   /* Minimal Input with Theme Focus */
   .luxury-input {
-    @apply w-full px-5 py-3.5 
-           bg-slate-900/50 rounded-2xl text-slate-100 placeholder-slate-500
-           focus:outline-none focus:bg-slate-900/70
-           transition-all duration-300
-           shadow-[inset_0_2px_8px_rgba(0,0,0,0.2)];
-    border: 1px solid var(--theme-primary);
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 1rem;
+    color: rgb(241, 245, 249);
+    transition: all 0.3s;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+    border: 1px solid;
+    border-color: var(--theme-primary);
     border-opacity: 0.15;
+    outline: none;
+  }
+  
+  .luxury-input::placeholder {
+    color: rgb(100, 116, 139);
   }
   
   .luxury-input:focus {
+    background: rgba(15, 23, 42, 0.7);
     border-color: var(--theme-primary);
     border-opacity: 0.4;
     box-shadow: 0 0 0 3px var(--theme-glow), inset 0 2px 8px rgba(0,0,0,0.2);
