@@ -36,7 +36,7 @@ export default function Lobby({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="w-full max-w-6xl px-4 relative"
+      className="w-full max-w-6xl px-4 py-8 relative"
     >
       {/* Header */}
       <div className="mb-8 text-center">

@@ -26,7 +26,7 @@ export default function CreateGame({ onCreateGame, onBack }: CreateGameProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md"
+      className="w-full max-w-md px-4"
     >
       <div className="luxury-card space-y-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-full blur-3xl -z-0" />

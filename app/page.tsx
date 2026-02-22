@@ -8,7 +8,7 @@ import JoinGame from '../components/JoinGame';
 import Lobby from '../components/Lobby';
 import GameResult from '../components/GameResult';
 import ErrorToast from '../components/ErrorToast';
-import Logo from '../components/Logo';
+import Navbar from '../components/Navbar';
 import { motion } from 'framer-motion';
 
 type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game';
@@ -57,12 +57,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Logo in top-left corner - visible on all screens except home */}
-      {screen !== 'home' && (
-        <div className="fixed top-4 left-4 z-50">
-          <Logo variant="minimal" />
-        </div>
-      )}
+      {/* Navigation Bar - Always visible */}
+      <Navbar showLogo={true} />
 
       {/* Balanced Dark/Light Background - Premium Feel */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
@@ -100,47 +96,49 @@ export default function Home() {
       {/* Error Toast */}
       <ErrorToast message={error} />
 
-      {/* Main Content */}
-      {screen === 'home' && (
-        <HomePage
-          onCreateGame={() => setScreen('create')}
-          onJoinGame={() => setScreen('join')}
-        />
-      )}
+      {/* Main Content - Add padding-top for navbar */}
+      <div className="w-full flex items-center justify-center min-h-screen pt-16">
+        {screen === 'home' && (
+          <HomePage
+            onCreateGame={() => setScreen('create')}
+            onJoinGame={() => setScreen('join')}
+          />
+        )}
 
-      {screen === 'create' && (
-        <CreateGame
-          onCreateGame={handleCreateGame}
-          onBack={handleBack}
-        />
-      )}
+        {screen === 'create' && (
+          <CreateGame
+            onCreateGame={handleCreateGame}
+            onBack={handleBack}
+          />
+        )}
 
-      {screen === 'join' && (
-        <JoinGame
-          onJoinGame={handleJoinGame}
-          onBack={handleBack}
-        />
-      )}
+        {screen === 'join' && (
+          <JoinGame
+            onJoinGame={handleJoinGame}
+            onBack={handleBack}
+          />
+        )}
 
-      {screen === 'lobby' && session && playerId && (
-        <Lobby
-          session={session}
-          playerId={playerId}
-          onToggleReady={toggleReady}
-          onAddChit={addChit}
-          onEditChit={editChit}
-          onRemoveChit={removeChit}
-          onStartGame={startGame}
-          onLeaveGame={handleLeaveGame}
-        />
-      )}
+        {screen === 'lobby' && session && playerId && (
+          <Lobby
+            session={session}
+            playerId={playerId}
+            onToggleReady={toggleReady}
+            onAddChit={addChit}
+            onEditChit={editChit}
+            onRemoveChit={removeChit}
+            onStartGame={startGame}
+            onLeaveGame={handleLeaveGame}
+          />
+        )}
 
-      {screen === 'game' && assignedChit && (
-        <GameResult
-          assignedChit={assignedChit}
-          onLeaveGame={handleLeaveGame}
-        />
-      )}
+        {screen === 'game' && assignedChit && (
+          <GameResult
+            assignedChit={assignedChit}
+            onLeaveGame={handleLeaveGame}
+          />
+        )}
+      </div>
 
       {/* Footer */}
       <motion.div
