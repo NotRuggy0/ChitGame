@@ -8,6 +8,7 @@ import JoinGame from '../components/JoinGame';
 import Lobby from '../components/Lobby';
 import GameResult from '../components/GameResult';
 import ErrorToast from '../components/ErrorToast';
+import Logo from '../components/Logo';
 import { motion } from 'framer-motion';
 
 type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game';
@@ -56,6 +57,13 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Logo in top-left corner - visible on all screens except home */}
+      {screen !== 'home' && (
+        <div className="fixed top-4 left-4 z-50">
+          <Logo variant="minimal" />
+        </div>
+      )}
+
       {/* Balanced Dark/Light Background - Premium Feel */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         {/* Rich dark gradient base with depth */}

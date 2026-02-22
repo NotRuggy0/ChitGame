@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Chit Assignment Platform',
+  title: 'Chit Game - Role Assignment Platform',
   description: 'Premium role assignment for games',
 };
 
