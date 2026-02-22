@@ -96,8 +96,10 @@ export default function Home() {
       {/* Navigation Bar - Always visible */}
       <Navbar showLogo={true} />
 
-      {/* Particle Effects */}
-      <ParticleEffect count={25} />
+      {/* Particle Effects - Behind everything */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: -10, pointerEvents: 'none' }}>
+        <ParticleEffect count={25} />
+      </div>
 
       {/* Confetti on Game Start */}
       <ConfettiEffect trigger={showConfetti} />
@@ -114,7 +116,7 @@ export default function Home() {
       </div>
 
       {/* Dynamic Themed Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
+      <div className="fixed inset-0 overflow-hidden" style={{ zIndex: -20, pointerEvents: 'none' }}>
         {/* Deep minimal base */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
         
@@ -162,7 +164,7 @@ export default function Home() {
       <ErrorToast message={error} />
 
       {/* Main Content - Add padding-top for navbar */}
-      <div className="w-full flex items-center justify-center min-h-screen pt-16">
+      <div className="w-full flex items-center justify-center min-h-screen pt-16" style={{ position: 'relative', zIndex: 1, pointerEvents: 'auto' }}>
         {screen === 'home' && (
           <HomePage
             onCreateGame={() => setScreen('create')}

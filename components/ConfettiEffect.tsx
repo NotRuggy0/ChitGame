@@ -34,7 +34,7 @@ export default function ConfettiEffect({ trigger }: { trigger: boolean }) {
   if (!trigger || confetti.length === 0) return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-50">
+    <div className="fixed inset-0 overflow-hidden" style={{ zIndex: 9999, pointerEvents: 'none' }}>
       {confetti.map((piece) => (
         <motion.div
           key={piece.id}

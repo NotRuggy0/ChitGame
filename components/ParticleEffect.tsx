@@ -28,7 +28,7 @@ export default function ParticleEffect({ count = 20 }: { count?: number }) {
   }, [count]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden -z-5">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: -1 }}>
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
