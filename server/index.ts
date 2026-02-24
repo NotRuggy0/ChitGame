@@ -396,15 +396,25 @@ function handleRestartGame(hostId: string) {
     player.assignedChit = undefined;
   });
 
-  // Broadcast restart to all players
-  broadcastToSession(sessionCode, {
-    type: 'game_restarted',
+  // Broadcast restart to all players (including host)
+  session.players.forEach((player) => {
+    const ws = playerToSocket.get(player.id);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({
+        type: 'game_restarted',
+      }));
+    }
   });
 
-  // Send updated session
-  broadcastToSession(sessionCode, {
-    type: 'session_update',
-    session: getSessionSnapshot(session),
+  // Send updated session to all players (including host)
+  session.players.forEach((player) => {
+    const ws = playerToSocket.get(player.id);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({
+        type: 'session_update',
+        session: getSessionSnapshot(session),
+      }));
+    }
   });
 }
 
@@ -480,14 +490,14 @@ function handleRematchResponse(hostId: string, requesterId: string, accept: bool
   }
 
   if (accept) {
-    // Broadcast accepted to all players
+    // Restart the game (this will broadcast game_restarted to everyone including host)
+    handleRestartGame(hostId);
+    
+    // Broadcast accepted to all players AFTER restart
     broadcastToSession(sessionCode, {
       type: 'rematch_accepted',
       requesterId,
     });
-    
-    // Restart the game
-    handleRestartGame(hostId);
   } else {
     // Notify the requester their request was declined
     const requesterWs = playerToSocket.get(requesterId);
