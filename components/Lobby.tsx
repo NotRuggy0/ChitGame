@@ -158,10 +158,12 @@ export default function Lobby({
       )}
 
       {/* Actions */}
-      <div className="flex gap-3">
+      <div className="flex gap-3" style={{ position: 'relative', zIndex: 100, pointerEvents: 'auto' }}>
         <button
           onClick={onLeaveGame}
           className="luxury-button-secondary"
+          type="button"
+          style={{ cursor: 'pointer', pointerEvents: 'auto' }}
         >
           Leave Game
         </button>
@@ -169,6 +171,8 @@ export default function Lobby({
         {/* Ready Button - All Players Including Host */}
         <button
           onClick={onToggleReady}
+          type="button"
+          style={{ cursor: 'pointer', pointerEvents: 'auto' }}
           className={`flex-1 luxury-button ${
             currentPlayer?.isReady
               ? 'bg-luxury-grey hover:bg-luxury-grey-light text-luxury-white'
@@ -183,6 +187,8 @@ export default function Lobby({
           <button
             onClick={onStartGame}
             disabled={!canStartGame}
+            type="button"
+            style={{ cursor: canStartGame ? 'pointer' : 'not-allowed', pointerEvents: 'auto' }}
             className="flex-1 luxury-button-primary"
           >
             {!chitsMatchPlayers
