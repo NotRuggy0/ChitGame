@@ -27,6 +27,7 @@ export default function Home() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
   const [showHostDecision, setShowHostDecision] = useState(false);
+  const [chatCountdown, setChatCountdown] = useState(10);
   const { theme, config, changeTheme } = useTheme();
   
   const {
@@ -119,6 +120,7 @@ export default function Home() {
   useEffect(() => {
     if (assignedChit && screen !== 'game' && screen !== 'in-game') {
       setScreen('game');
+      setChatCountdown(10); // Reset countdown
       // Show host decision after 2 seconds
       if (session && playerId === session.hostId) {
         setTimeout(() => setShowHostDecision(true), 2000);
@@ -133,6 +135,15 @@ export default function Home() {
       setShowHostDecision(false);
     }
   }, [chatAllowed, screen]);
+
+  // Auto-switch to lobby when game is restarted (rematch accepted)
+  useEffect(() => {
+    if (!assignedChit && session && (screen === 'game' || screen === 'in-game')) {
+      setScreen('lobby');
+      setShowHostDecision(false);
+      setChatCountdown(10);
+    }
+  }, [assignedChit, session, screen]);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -261,6 +272,8 @@ export default function Home() {
             isHost={session.hostId === playerId}
             onAllowChatTransition={handleAllowChatTransition}
             showHostDecision={showHostDecision}
+            countdown={chatCountdown}
+            onCountdownChange={setChatCountdown}
           />
         )}
 

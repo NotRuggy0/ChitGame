@@ -12,6 +12,8 @@ interface GameResultProps {
   isHost: boolean;
   onAllowChatTransition?: () => void;
   showHostDecision?: boolean;
+  countdown?: number;
+  onCountdownChange?: (value: number) => void;
 }
 
 export default function GameResult({ 
@@ -20,10 +22,15 @@ export default function GameResult({
   onRematch, 
   isHost,
   onAllowChatTransition,
-  showHostDecision = false
+  showHostDecision = false,
+  countdown: externalCountdown,
+  onCountdownChange
 }: GameResultProps) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [countdown, setCountdown] = useState(10);
+  const [internalCountdown, setInternalCountdown] = useState(10);
+  
+  // Use external countdown if provided, otherwise use internal
+  const countdown = externalCountdown !== undefined ? externalCountdown : internalCountdown;
 
   useEffect(() => {
     // Auto-flip after 1 second
@@ -34,11 +41,23 @@ export default function GameResult({
   useEffect(() => {
     if (showHostDecision && isHost && countdown > 0) {
       const timer = setInterval(() => {
-        setCountdown(prev => prev - 1);
+        const newValue = countdown - 1;
+        if (onCountdownChange) {
+          onCountdownChange(newValue);
+        } else {
+          setInternalCountdown(newValue);
+        }
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [showHostDecision, isHost, countdown]);
+  }, [showHostDecision, isHost, countdown, onCountdownChange]);
+
+  // Auto-allow chat when countdown reaches 0
+  useEffect(() => {
+    if (showHostDecision && isHost && countdown === 0 && onAllowChatTransition) {
+      onAllowChatTransition();
+    }
+  }, [showHostDecision, isHost, countdown, onAllowChatTransition]);
 
   return (
     <motion.div
@@ -149,7 +168,10 @@ export default function GameResult({
         {/* Non-host waiting message */}
         {!isHost && showHostDecision && (
           <div className="mb-4 p-4 bg-gradient-to-br from-cyan-500/10 to-teal-500/10 rounded-2xl border border-cyan-400/30 text-center">
-            <p className="text-cyan-300/80">Waiting for host decision...</p>
+            <p className="text-cyan-300/80 mb-2">Waiting for host decision...</p>
+            <p className="text-slate-400 text-sm">
+              You will be redirected to chat in <span className="text-cyan-400 font-bold">{countdown}s</span>
+            </p>
             <div className="mt-2 flex justify-center gap-1">
               <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
               <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
