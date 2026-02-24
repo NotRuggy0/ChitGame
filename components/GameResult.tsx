@@ -107,34 +107,35 @@ export default function GameResult({ assignedChit, onLeaveGame, onContinue, onRe
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
         className="space-y-3"
+        style={{ position: 'relative', zIndex: 1000, pointerEvents: 'auto' }}
       >
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+        <button
           onClick={onContinue}
           className="luxury-button-primary w-full text-lg py-4"
+          style={{ position: 'relative', zIndex: 1001, pointerEvents: 'auto', cursor: 'pointer' }}
+          type="button"
         >
-          ✨ Continue to Chat
-        </motion.button>
+          Continue to Chat
+        </button>
 
-        <div className="grid grid-cols-2 gap-3">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+        <div className="grid grid-cols-2 gap-3" style={{ position: 'relative', zIndex: 1000, pointerEvents: 'auto' }}>
+          <button
             onClick={onRematch}
-            className="luxury-button-secondary"
+            className="luxury-button-secondary py-4"
+            style={{ position: 'relative', zIndex: 1001, pointerEvents: 'auto', cursor: 'pointer' }}
+            type="button"
           >
-            🔄 Rematch
-          </motion.button>
+            Request Rematch
+          </button>
 
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          <button
             onClick={onLeaveGame}
-            className="luxury-button-secondary"
+            className="luxury-button-secondary py-4"
+            style={{ position: 'relative', zIndex: 1001, pointerEvents: 'auto', cursor: 'pointer' }}
+            type="button"
           >
-            🚪 Leave
-          </motion.button>
+            Leave Game
+          </button>
         </div>
       </motion.div>
     </motion.div>

@@ -78,14 +78,18 @@ export default function InGameChat({
               <button
                 onClick={onRematch}
                 className="luxury-button-secondary px-4 py-2 text-sm"
+                type="button"
+                style={{ cursor: 'pointer' }}
               >
-                🔄 Request Rematch
+                Request Rematch
               </button>
               <button
                 onClick={onLeaveGame}
                 className="luxury-button-secondary px-4 py-2 text-sm"
+                type="button"
+                style={{ cursor: 'pointer' }}
               >
-                🚪 Leave
+                Leave Game
               </button>
             </div>
           </div>
