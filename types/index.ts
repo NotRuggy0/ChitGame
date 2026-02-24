@@ -36,7 +36,9 @@ export type ClientMessage =
   | { type: 'send_chat'; message: string }
   | { type: 'request_rematch' }
   | { type: 'respond_to_rematch'; requesterId: string; accept: boolean }
-  | { type: 'allow_chat_transition' };
+  | { type: 'allow_chat_transition' }
+  | { type: 'cast_vote'; targetPlayerId: string }
+  | { type: 'end_voting' };
 
 export interface ChatMessage {
   id: string;
@@ -50,6 +52,20 @@ export interface RematchRequest {
   requesterId: string;
   requesterName: string;
   timestamp: number;
+}
+
+export interface VoteData {
+  voterId: string;
+  voterName: string;
+  targetPlayerId: string;
+  targetPlayerName: string;
+}
+
+export interface VotingResults {
+  votes: VoteData[];
+  voteCounts: { [playerId: string]: number };
+  totalVotes: number;
+  playerNames: { [playerId: string]: string };
 }
 
 export type ServerMessage =
@@ -67,7 +83,9 @@ export type ServerMessage =
   | { type: 'rematch_accepted'; requesterId: string }
   | { type: 'rematch_declined'; requesterId: string }
   | { type: 'chat_transition_allowed' }
-  | { type: 'all_players_kicked' };
+  | { type: 'all_players_kicked' }
+  | { type: 'vote_cast'; vote: VoteData }
+  | { type: 'voting_ended'; results: VotingResults };
 
 export interface SessionSnapshot {
   code: string;

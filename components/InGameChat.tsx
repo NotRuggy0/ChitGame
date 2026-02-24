@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { Chit, SessionSnapshot, ChatMessage } from '../types';
 import RoleCard from './RoleCard';
+import VotingArea from './VotingArea';
 
 interface InGameChatProps {
   assignedChit: Chit;
@@ -13,6 +14,11 @@ interface InGameChatProps {
   onSendMessage: (message: string) => void;
   onLeaveGame: () => void;
   onRematch: () => void;
+  onVote: (targetPlayerId: string) => void;
+  hasVoted: boolean;
+  myVote?: string;
+  voteCounts?: { [playerId: string]: number };
+  onEndVoting: () => void;
 }
 
 export default function InGameChat({
@@ -23,15 +29,51 @@ export default function InGameChat({
   onSendMessage,
   onLeaveGame,
   onRematch,
+  onVote,
+  hasVoted,
+  myVote,
+  voteCounts = {},
+  onEndVoting,
 }: InGameChatProps) {
   const [message, setMessage] = useState('');
+  const [votingCountdown, setVotingCountdown] = useState(10);
+  const [showVoting, setShowVoting] = useState(false);
+  const [hostVotingTimer, setHostVotingTimer] = useState(30);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  
+  const isHost = session.hostId === playerId;
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
+
+  // Voting countdown: 10 seconds before showing voting area
+  useEffect(() => {
+    if (votingCountdown > 0) {
+      const timer = setInterval(() => {
+        setVotingCountdown(prev => {
+          if (prev === 1) {
+            setShowVoting(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [votingCountdown]);
+
+  // Host voting timer: 30 seconds for host to end voting
+  useEffect(() => {
+    if (showVoting && isHost && hostVotingTimer > 0) {
+      const timer = setInterval(() => {
+        setHostVotingTimer(prev => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [showVoting, isHost, hostVotingTimer]);
 
   const handleSend = () => {
     if (message.trim()) {
@@ -156,9 +198,37 @@ export default function InGameChat({
         </div>
       </div>
 
-      {/* Right Side - Role Card */}
-      <div className="w-80">
+      {/* Right Side - Role Card and Voting */}
+      <div className="w-80 flex flex-col gap-4">
         <RoleCard assignedChit={assignedChit} />
+        
+        {/* Voting Countdown */}
+        {!showVoting && votingCountdown > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="luxury-card p-4 text-center"
+          >
+            <p className="text-slate-400 text-sm mb-2">Voting starts in</p>
+            <p className="text-3xl font-bold text-cyan-400">{votingCountdown}s</p>
+          </motion.div>
+        )}
+
+        {/* Voting Area */}
+        <AnimatePresence>
+          {showVoting && (
+            <VotingArea
+              players={session.players}
+              onVote={onVote}
+              hasVoted={hasVoted}
+              myVote={myVote}
+              isHost={isHost}
+              voteCounts={voteCounts}
+              onEndVoting={onEndVoting}
+              hostVotingTimer={hostVotingTimer}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

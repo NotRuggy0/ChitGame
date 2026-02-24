@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import type { ClientMessage, ServerMessage, SessionSnapshot, Chit, ChatMessage, RematchRequest } from '../types';
+import type { ClientMessage, ServerMessage, SessionSnapshot, Chit, ChatMessage, RematchRequest, VoteData, VotingResults } from '../types';
 
 export function useWebSocket() {
   const [isConnected, setIsConnected] = useState(false);
@@ -10,6 +10,10 @@ export function useWebSocket() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [rematchRequests, setRematchRequests] = useState<RematchRequest[]>([]);
   const [chatAllowed, setChatAllowed] = useState(false);
+  const [voteCounts, setVoteCounts] = useState<{ [playerId: string]: number }>({});
+  const [hasVoted, setHasVoted] = useState(false);
+  const [myVote, setMyVote] = useState<string | undefined>(undefined);
+  const [votingResults, setVotingResults] = useState<VotingResults | null>(null);
   const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -58,6 +62,10 @@ export function useWebSocket() {
             setChatMessages([]);
             setChatAllowed(false);
             setRematchRequests([]);
+            setVoteCounts({});
+            setHasVoted(false);
+            setMyVote(undefined);
+            setVotingResults(null);
             // Session update will follow
             break;
           case 'chat_message':
@@ -92,6 +100,21 @@ export function useWebSocket() {
               setRematchRequests([]);
               setChatAllowed(false);
             }, 2000);
+            break;
+          case 'vote_cast':
+            // Update vote counts for host, or confirm vote for voter
+            if (message.vote.voterId === playerId) {
+              setHasVoted(true);
+              setMyVote(message.vote.targetPlayerId);
+            }
+            // For host, update real-time vote counts
+            setVoteCounts(prev => ({
+              ...prev,
+              [message.vote.targetPlayerId]: (prev[message.vote.targetPlayerId] || 0) + 1
+            }));
+            break;
+          case 'voting_ended':
+            setVotingResults(message.results);
             break;
         }
       } catch (err) {
@@ -159,6 +182,10 @@ export function useWebSocket() {
     setChatMessages([]);
     setRematchRequests([]);
     setChatAllowed(false);
+    setVoteCounts({});
+    setHasVoted(false);
+    setMyVote(undefined);
+    setVotingResults(null);
   }, [send]);
 
   const kickPlayer = useCallback((targetPlayerId: string) => {
@@ -193,6 +220,14 @@ export function useWebSocket() {
     setChatAllowed(true);
   }, [send]);
 
+  const castVote = useCallback((targetPlayerId: string) => {
+    send({ type: 'cast_vote', targetPlayerId });
+  }, [send]);
+
+  const endVoting = useCallback(() => {
+    send({ type: 'end_voting' });
+  }, [send]);
+
   return {
     isConnected,
     session,
@@ -202,6 +237,10 @@ export function useWebSocket() {
     chatMessages,
     rematchRequests,
     chatAllowed,
+    voteCounts,
+    hasVoted,
+    myVote,
+    votingResults,
     createGame,
     joinGame,
     toggleReady,
@@ -216,5 +255,7 @@ export function useWebSocket() {
     requestRematch,
     respondToRematch,
     allowChatTransition,
+    castVote,
+    endVoting,
   };
 }

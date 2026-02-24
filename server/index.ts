@@ -7,6 +7,8 @@ import type {
   ClientMessage,
   ServerMessage,
   SessionSnapshot,
+  VoteData,
+  VotingResults,
 } from '../types';
 
 const PORT = process.env.PORT || 8080;
@@ -15,6 +17,7 @@ const wss = new WebSocketServer({ port: Number(PORT) });
 const sessions = new Map<string, GameSession>();
 const playerToSession = new Map<string, string>();
 const playerToSocket = new Map<string, WebSocket>();
+const sessionVotes = new Map<string, VoteData[]>(); // Track votes per session
 
 function generateGameCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -530,10 +533,123 @@ function handleAllowChatTransition(hostId: string) {
     return;
   }
 
+  // Initialize voting for this session
+  sessionVotes.set(sessionCode, []);
+
   // Broadcast to all players that chat is allowed
   broadcastToSession(sessionCode, {
     type: 'chat_transition_allowed',
   });
+}
+
+function handleCastVote(voterId: string, targetPlayerId: string) {
+  const sessionCode = playerToSession.get(voterId);
+  if (!sessionCode) return;
+
+  const session = sessions.get(sessionCode);
+  if (!session) return;
+
+  const voter = session.players.get(voterId);
+  const target = session.players.get(targetPlayerId);
+  
+  if (!voter || !target) return;
+
+  const votes = sessionVotes.get(sessionCode) || [];
+
+  // Check if player has already voted
+  if (votes.some(v => v.voterId === voterId)) {
+    const ws = playerToSocket.get(voterId);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const error: ServerMessage = {
+        type: 'error',
+        message: 'You have already voted',
+      };
+      ws.send(JSON.stringify(error));
+    }
+    return;
+  }
+
+  const voteData: VoteData = {
+    voterId,
+    voterName: voter.displayName,
+    targetPlayerId,
+    targetPlayerName: target.displayName,
+  };
+
+  votes.push(voteData);
+  sessionVotes.set(sessionCode, votes);
+
+  // Broadcast the vote to the host (for real-time tracking)
+  const hostWs = playerToSocket.get(session.hostId);
+  if (hostWs && hostWs.readyState === WebSocket.OPEN) {
+    hostWs.send(JSON.stringify({
+      type: 'vote_cast',
+      vote: voteData,
+    }));
+  }
+
+  // Confirm to the voter
+  const voterWs = playerToSocket.get(voterId);
+  if (voterWs && voterWs.readyState === WebSocket.OPEN) {
+    voterWs.send(JSON.stringify({
+      type: 'vote_cast',
+      vote: voteData,
+    }));
+  }
+}
+
+function handleEndVoting(hostId: string) {
+  const sessionCode = playerToSession.get(hostId);
+  if (!sessionCode) return;
+
+  const session = sessions.get(sessionCode);
+  if (!session) return;
+
+  // Verify the requester is the host
+  if (session.hostId !== hostId) {
+    const ws = playerToSocket.get(hostId);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const error: ServerMessage = {
+        type: 'error',
+        message: 'Only the host can end voting',
+      };
+      ws.send(JSON.stringify(error));
+    }
+    return;
+  }
+
+  const votes = sessionVotes.get(sessionCode) || [];
+
+  // Calculate vote counts
+  const voteCounts: { [playerId: string]: number } = {};
+  const playerNames: { [playerId: string]: string } = {};
+
+  // Initialize all players with 0 votes
+  session.players.forEach((player) => {
+    voteCounts[player.id] = 0;
+    playerNames[player.id] = player.displayName;
+  });
+
+  // Count votes
+  votes.forEach(vote => {
+    voteCounts[vote.targetPlayerId] = (voteCounts[vote.targetPlayerId] || 0) + 1;
+  });
+
+  const results: VotingResults = {
+    votes,
+    voteCounts,
+    totalVotes: votes.length,
+    playerNames,
+  };
+
+  // Broadcast results to all players
+  broadcastToSession(sessionCode, {
+    type: 'voting_ended',
+    results,
+  });
+
+  // Clear votes for this session
+  sessionVotes.delete(sessionCode);
 }
 
 wss.on('connection', (ws: WebSocket) => {
@@ -620,6 +736,18 @@ wss.on('connection', (ws: WebSocket) => {
           const hostId = Array.from(playerToSocket.entries())
             .find(([, socket]) => socket === ws)?.[0];
           if (hostId) handleAllowChatTransition(hostId);
+          break;
+        }
+        case 'cast_vote': {
+          const voterId = Array.from(playerToSocket.entries())
+            .find(([, socket]) => socket === ws)?.[0];
+          if (voterId) handleCastVote(voterId, message.targetPlayerId);
+          break;
+        }
+        case 'end_voting': {
+          const hostId = Array.from(playerToSocket.entries())
+            .find(([, socket]) => socket === ws)?.[0];
+          if (hostId) handleEndVoting(hostId);
           break;
         }
       }

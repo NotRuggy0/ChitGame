@@ -17,10 +17,11 @@ import ThemeSwitcher from '../components/ThemeSwitcher';
 import GameHistory from '../components/GameHistory';
 import InGameChat from '../components/InGameChat';
 import RematchRequestPopup from '../components/RematchRequestPopup';
+import VotingResults from '../components/VotingResults';
 import { motion, AnimatePresence } from 'framer-motion';
 import { saveGameToHistory } from '../utils/gameHistory';
 
-type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game' | 'in-game';
+type Screen = 'home' | 'create' | 'join' | 'lobby' | 'game' | 'in-game' | 'voting-results';
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>('home');
@@ -39,6 +40,10 @@ export default function Home() {
     chatMessages,
     rematchRequests,
     chatAllowed,
+    voteCounts,
+    hasVoted,
+    myVote,
+    votingResults,
     createGame,
     joinGame,
     toggleReady,
@@ -53,6 +58,8 @@ export default function Home() {
     requestRematch,
     respondToRematch,
     allowChatTransition,
+    castVote,
+    endVoting,
   } = useWebSocket();
 
   const handleCreateGame = (maxPlayers: number, hostName: string) => {
@@ -135,6 +142,13 @@ export default function Home() {
       setShowHostDecision(false);
     }
   }, [chatAllowed, screen]);
+
+  // Auto-switch to voting results when voting ends
+  useEffect(() => {
+    if (votingResults && screen === 'in-game') {
+      setScreen('voting-results');
+    }
+  }, [votingResults, screen]);
 
   // Auto-switch to lobby when game is restarted (rematch accepted)
   useEffect(() => {
@@ -286,6 +300,18 @@ export default function Home() {
             onSendMessage={sendChatMessage}
             onLeaveGame={handleLeaveGame}
             onRematch={handleRematch}
+            onVote={castVote}
+            hasVoted={hasVoted}
+            myVote={myVote}
+            voteCounts={voteCounts}
+            onEndVoting={endVoting}
+          />
+        )}
+
+        {screen === 'voting-results' && votingResults && (
+          <VotingResults
+            results={votingResults}
+            onContinue={() => setScreen('in-game')}
           />
         )}
       </div>
