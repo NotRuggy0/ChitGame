@@ -32,19 +32,23 @@ export default function VotingArea({
     >
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold text-cyan-300">Cast Your Vote</h3>
-        {isHost && hostVotingTimer !== undefined && hostVotingTimer > 0 && (
+        {isHost && hostVotingTimer !== undefined && (
           <div className="flex items-center gap-3">
-            <span className="text-sm text-slate-400">
-              You can end voting in <span className="text-cyan-400 font-bold">{hostVotingTimer}s</span>
-            </span>
-            {hostVotingTimer <= 30 && onEndVoting && (
-              <button
-                onClick={onEndVoting}
-                className="luxury-button-secondary px-4 py-2 text-sm"
-                type="button"
-              >
-                End Voting
-              </button>
+            {hostVotingTimer > 0 ? (
+              <span className="text-sm text-slate-400">
+                You can end voting in <span className="text-cyan-400 font-bold">{hostVotingTimer}s</span>
+              </span>
+            ) : (
+              onEndVoting && (
+                <button
+                  onClick={onEndVoting}
+                  className="luxury-button-secondary px-4 py-2 text-sm"
+                  type="button"
+                  style={{ cursor: 'pointer' }}
+                >
+                  End Voting
+                </button>
+              )
             )}
           </div>
         )}
