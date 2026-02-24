@@ -16,6 +16,7 @@ import CountdownTimer from '../components/CountdownTimer';
 import ThemeSwitcher from '../components/ThemeSwitcher';
 import GameHistory from '../components/GameHistory';
 import InGameChat from '../components/InGameChat';
+import RematchRequestPopup from '../components/RematchRequestPopup';
 import { motion, AnimatePresence } from 'framer-motion';
 import { saveGameToHistory } from '../utils/gameHistory';
 
@@ -25,6 +26,7 @@ export default function Home() {
   const [screen, setScreen] = useState<Screen>('home');
   const [showConfetti, setShowConfetti] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
+  const [showHostDecision, setShowHostDecision] = useState(false);
   const { theme, config, changeTheme } = useTheme();
   
   const {
@@ -34,6 +36,8 @@ export default function Home() {
     assignedChit,
     error,
     chatMessages,
+    rematchRequests,
+    chatAllowed,
     createGame,
     joinGame,
     toggleReady,
@@ -46,6 +50,8 @@ export default function Home() {
     restartGame,
     sendChatMessage,
     requestRematch,
+    respondToRematch,
+    allowChatTransition,
   } = useWebSocket();
 
   const handleCreateGame = (maxPlayers: number, hostName: string) => {
@@ -78,12 +84,21 @@ export default function Home() {
     setScreen('home');
   };
 
-  const handleContinueToChat = () => {
-    setScreen('in-game');
-  };
-
   const handleRematch = () => {
     requestRematch();
+  };
+
+  const handleAllowChatTransition = () => {
+    allowChatTransition();
+    setShowHostDecision(false);
+  };
+
+  const handleAcceptRematch = (requesterId: string) => {
+    respondToRematch(requesterId, true);
+  };
+
+  const handleDeclineRematch = (requesterId: string) => {
+    respondToRematch(requesterId, false);
   };
 
   // Save game to history when assigned a chit
@@ -101,9 +116,23 @@ export default function Home() {
   }, [assignedChit, session, playerId]);
 
   // Auto-switch to game screen when chit is assigned
-  if (assignedChit && screen !== 'game') {
-    setScreen('game');
-  }
+  useEffect(() => {
+    if (assignedChit && screen !== 'game' && screen !== 'in-game') {
+      setScreen('game');
+      // Show host decision after 2 seconds
+      if (session && playerId === session.hostId) {
+        setTimeout(() => setShowHostDecision(true), 2000);
+      }
+    }
+  }, [assignedChit, screen, session, playerId]);
+
+  // Auto-switch to in-game chat when chat is allowed
+  useEffect(() => {
+    if (chatAllowed && screen === 'game') {
+      setScreen('in-game');
+      setShowHostDecision(false);
+    }
+  }, [chatAllowed, screen]);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -177,6 +206,15 @@ export default function Home() {
       {/* Error Toast */}
       <ErrorToast message={error} />
 
+      {/* Rematch Request Popups */}
+      {session && playerId === session.hostId && (
+        <RematchRequestPopup
+          requests={rematchRequests}
+          onAccept={handleAcceptRematch}
+          onDecline={handleDeclineRematch}
+        />
+      )}
+
       {/* Main Content - Add padding-top for navbar */}
       <div className="w-full flex items-center justify-center min-h-screen pt-16" style={{ position: 'relative', zIndex: 1, pointerEvents: 'auto' }}>
         {screen === 'home' && (
@@ -215,12 +253,14 @@ export default function Home() {
           />
         )}
 
-        {screen === 'game' && assignedChit && (
+        {screen === 'game' && assignedChit && session && playerId && (
           <GameResult
             assignedChit={assignedChit}
             onLeaveGame={handleLeaveGame}
-            onContinue={handleContinueToChat}
             onRematch={handleRematch}
+            isHost={session.hostId === playerId}
+            onAllowChatTransition={handleAllowChatTransition}
+            showHostDecision={showHostDecision}
           />
         )}
 

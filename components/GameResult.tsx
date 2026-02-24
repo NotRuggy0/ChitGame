@@ -8,18 +8,37 @@ import FlipCard from './FlipCard';
 interface GameResultProps {
   assignedChit: Chit;
   onLeaveGame: () => void;
-  onContinue: () => void;
   onRematch: () => void;
+  isHost: boolean;
+  onAllowChatTransition?: () => void;
+  showHostDecision?: boolean;
 }
 
-export default function GameResult({ assignedChit, onLeaveGame, onContinue, onRematch }: GameResultProps) {
+export default function GameResult({ 
+  assignedChit, 
+  onLeaveGame, 
+  onRematch, 
+  isHost,
+  onAllowChatTransition,
+  showHostDecision = false
+}: GameResultProps) {
   const [isFlipped, setIsFlipped] = useState(false);
+  const [countdown, setCountdown] = useState(10);
 
   useEffect(() => {
     // Auto-flip after 1 second
     const timer = setTimeout(() => setIsFlipped(true), 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (showHostDecision && isHost && countdown > 0) {
+      const timer = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [showHostDecision, isHost, countdown]);
 
   return (
     <motion.div
@@ -109,14 +128,35 @@ export default function GameResult({ assignedChit, onLeaveGame, onContinue, onRe
         className="space-y-3"
         style={{ position: 'relative', zIndex: 1000, pointerEvents: 'auto' }}
       >
-        <button
-          onClick={onContinue}
-          className="luxury-button-primary w-full text-lg py-4"
-          style={{ position: 'relative', zIndex: 1001, pointerEvents: 'auto', cursor: 'pointer' }}
-          type="button"
-        >
-          Continue to Chat
-        </button>
+        {/* Host Decision UI */}
+        {isHost && showHostDecision && onAllowChatTransition && (
+          <div className="mb-4 p-4 bg-gradient-to-br from-cyan-500/10 to-teal-500/10 rounded-2xl border border-cyan-400/30">
+            <div className="text-center mb-3">
+              <p className="text-cyan-300 font-semibold mb-1">Choose your decision</p>
+              <div className="text-2xl font-bold text-cyan-400">{countdown}s</div>
+            </div>
+            <button
+              onClick={onAllowChatTransition}
+              className="luxury-button-primary w-full text-lg py-4"
+              type="button"
+              style={{ position: 'relative', zIndex: 1001, pointerEvents: 'auto', cursor: 'pointer' }}
+            >
+              Allow Chat
+            </button>
+          </div>
+        )}
+
+        {/* Non-host waiting message */}
+        {!isHost && showHostDecision && (
+          <div className="mb-4 p-4 bg-gradient-to-br from-cyan-500/10 to-teal-500/10 rounded-2xl border border-cyan-400/30 text-center">
+            <p className="text-cyan-300/80">Waiting for host decision...</p>
+            <div className="mt-2 flex justify-center gap-1">
+              <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-3" style={{ position: 'relative', zIndex: 1000, pointerEvents: 'auto' }}>
           <button

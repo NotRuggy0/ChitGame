@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import type { ClientMessage, ServerMessage, SessionSnapshot, Chit, ChatMessage } from '../types';
+import type { ClientMessage, ServerMessage, SessionSnapshot, Chit, ChatMessage, RematchRequest } from '../types';
 
 export function useWebSocket() {
   const [isConnected, setIsConnected] = useState(false);
@@ -8,6 +8,8 @@ export function useWebSocket() {
   const [assignedChit, setAssignedChit] = useState<Chit | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [rematchRequests, setRematchRequests] = useState<RematchRequest[]>([]);
+  const [chatAllowed, setChatAllowed] = useState(false);
   const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -54,15 +56,42 @@ export function useWebSocket() {
             // Reset local state
             setAssignedChit(null);
             setChatMessages([]);
+            setChatAllowed(false);
+            setRematchRequests([]);
             // Session update will follow
             break;
           case 'chat_message':
             setChatMessages(prev => [...prev, message.chatMessage]);
             break;
           case 'rematch_requested':
-            // Show notification
-            setError(`${message.requesterName} requested a rematch!`);
+            // Add to rematch requests queue
+            setRematchRequests(prev => [...prev, message.request]);
+            break;
+          case 'rematch_accepted':
+            // Remove from queue
+            setRematchRequests(prev => prev.filter(r => r.requesterId !== message.requesterId));
+            setError('Rematch accepted! Restarting game...');
             setTimeout(() => setError(null), 3000);
+            break;
+          case 'rematch_declined':
+            // Remove from queue
+            setRematchRequests(prev => prev.filter(r => r.requesterId !== message.requesterId));
+            setError('Your rematch request was declined');
+            setTimeout(() => setError(null), 3000);
+            break;
+          case 'chat_transition_allowed':
+            setChatAllowed(true);
+            break;
+          case 'all_players_kicked':
+            setError('Host has left the game. All players have been kicked.');
+            setTimeout(() => {
+              setSession(null);
+              setPlayerId(null);
+              setAssignedChit(null);
+              setChatMessages([]);
+              setRematchRequests([]);
+              setChatAllowed(false);
+            }, 2000);
             break;
         }
       } catch (err) {
@@ -127,6 +156,9 @@ export function useWebSocket() {
     setSession(null);
     setPlayerId(null);
     setAssignedChit(null);
+    setChatMessages([]);
+    setRematchRequests([]);
+    setChatAllowed(false);
   }, [send]);
 
   const kickPlayer = useCallback((targetPlayerId: string) => {
@@ -137,6 +169,8 @@ export function useWebSocket() {
     // Reset assigned chit and clear roles
     setAssignedChit(null);
     setChatMessages([]);
+    setChatAllowed(false);
+    setRematchRequests([]);
     send({ type: 'restart_game' });
   }, [send]);
 
@@ -148,6 +182,17 @@ export function useWebSocket() {
     send({ type: 'request_rematch' });
   }, [send]);
 
+  const respondToRematch = useCallback((requesterId: string, accept: boolean) => {
+    send({ type: 'respond_to_rematch', requesterId, accept });
+    // Remove from local queue
+    setRematchRequests(prev => prev.filter(r => r.requesterId !== requesterId));
+  }, [send]);
+
+  const allowChatTransition = useCallback(() => {
+    send({ type: 'allow_chat_transition' });
+    setChatAllowed(true);
+  }, [send]);
+
   return {
     isConnected,
     session,
@@ -155,6 +200,8 @@ export function useWebSocket() {
     assignedChit,
     error,
     chatMessages,
+    rematchRequests,
+    chatAllowed,
     createGame,
     joinGame,
     toggleReady,
@@ -167,5 +214,7 @@ export function useWebSocket() {
     restartGame,
     sendChatMessage,
     requestRematch,
+    respondToRematch,
+    allowChatTransition,
   };
 }

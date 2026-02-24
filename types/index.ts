@@ -34,13 +34,21 @@ export type ClientMessage =
   | { type: 'kick_player'; targetPlayerId: string }
   | { type: 'restart_game' }
   | { type: 'send_chat'; message: string }
-  | { type: 'request_rematch' };
+  | { type: 'request_rematch' }
+  | { type: 'respond_to_rematch'; requesterId: string; accept: boolean }
+  | { type: 'allow_chat_transition' };
 
 export interface ChatMessage {
   id: string;
   playerId: string;
   playerName: string;
   message: string;
+  timestamp: number;
+}
+
+export interface RematchRequest {
+  requesterId: string;
+  requesterName: string;
   timestamp: number;
 }
 
@@ -55,7 +63,11 @@ export type ServerMessage =
   | { type: 'player_kicked'; playerId: string }
   | { type: 'game_restarted' }
   | { type: 'chat_message'; chatMessage: ChatMessage }
-  | { type: 'rematch_requested'; requesterId: string; requesterName: string };
+  | { type: 'rematch_requested'; request: RematchRequest }
+  | { type: 'rematch_accepted'; requesterId: string }
+  | { type: 'rematch_declined'; requesterId: string }
+  | { type: 'chat_transition_allowed' }
+  | { type: 'all_players_kicked' };
 
 export interface SessionSnapshot {
   code: string;

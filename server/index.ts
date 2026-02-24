@@ -279,6 +279,25 @@ function handleLeaveGame(playerId: string) {
   const session = sessions.get(sessionCode);
   if (!session) return;
 
+  // If host is leaving, kick all players
+  if (session.hostId === playerId) {
+    // Notify all other players they're being kicked
+    broadcastToSession(sessionCode, {
+      type: 'all_players_kicked',
+    }, playerId);
+
+    // Remove all players
+    session.players.forEach((player) => {
+      playerToSession.delete(player.id);
+      playerToSocket.delete(player.id);
+    });
+
+    // Delete the session
+    sessions.delete(sessionCode);
+    return;
+  }
+
+  // Regular player leaving
   session.players.delete(playerId);
   playerToSession.delete(playerId);
   playerToSocket.delete(playerId);
@@ -287,18 +306,6 @@ function handleLeaveGame(playerId: string) {
   if (session.players.size === 0) {
     sessions.delete(sessionCode);
     return;
-  }
-
-  // If host left, assign new host
-  if (session.hostId === playerId) {
-    const newHost = Array.from(session.players.values())[0];
-    newHost.isHost = true;
-    session.hostId = newHost.id;
-
-    broadcastToSession(sessionCode, {
-      type: 'host_changed',
-      newHostId: newHost.id,
-    });
   }
 
   broadcastToSession(sessionCode, {
@@ -436,12 +443,87 @@ function handleRematchRequest(requesterId: string) {
   const requester = session.players.get(requesterId);
   if (!requester) return;
 
-  // Broadcast rematch request to all players except the requester
-  broadcastToSession(sessionCode, {
-    type: 'rematch_requested',
+  const request = {
     requesterId,
     requesterName: requester.displayName,
-  }, requesterId);
+    timestamp: Date.now(),
+  };
+
+  // Broadcast rematch request to host only
+  const hostWs = playerToSocket.get(session.hostId);
+  if (hostWs && hostWs.readyState === WebSocket.OPEN) {
+    hostWs.send(JSON.stringify({
+      type: 'rematch_requested',
+      request,
+    }));
+  }
+}
+
+function handleRematchResponse(hostId: string, requesterId: string, accept: boolean) {
+  const sessionCode = playerToSession.get(hostId);
+  if (!sessionCode) return;
+
+  const session = sessions.get(sessionCode);
+  if (!session) return;
+
+  // Verify the responder is the host
+  if (session.hostId !== hostId) {
+    const ws = playerToSocket.get(hostId);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const error: ServerMessage = {
+        type: 'error',
+        message: 'Only the host can respond to rematch requests',
+      };
+      ws.send(JSON.stringify(error));
+    }
+    return;
+  }
+
+  if (accept) {
+    // Broadcast accepted to all players
+    broadcastToSession(sessionCode, {
+      type: 'rematch_accepted',
+      requesterId,
+    });
+    
+    // Restart the game
+    handleRestartGame(hostId);
+  } else {
+    // Notify the requester their request was declined
+    const requesterWs = playerToSocket.get(requesterId);
+    if (requesterWs && requesterWs.readyState === WebSocket.OPEN) {
+      requesterWs.send(JSON.stringify({
+        type: 'rematch_declined',
+        requesterId,
+      }));
+    }
+  }
+}
+
+function handleAllowChatTransition(hostId: string) {
+  const sessionCode = playerToSession.get(hostId);
+  if (!sessionCode) return;
+
+  const session = sessions.get(sessionCode);
+  if (!session) return;
+
+  // Verify the requester is the host
+  if (session.hostId !== hostId) {
+    const ws = playerToSocket.get(hostId);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const error: ServerMessage = {
+        type: 'error',
+        message: 'Only the host can allow chat transition',
+      };
+      ws.send(JSON.stringify(error));
+    }
+    return;
+  }
+
+  // Broadcast to all players that chat is allowed
+  broadcastToSession(sessionCode, {
+    type: 'chat_transition_allowed',
+  });
 }
 
 wss.on('connection', (ws: WebSocket) => {
@@ -516,6 +598,18 @@ wss.on('connection', (ws: WebSocket) => {
           const requesterId = Array.from(playerToSocket.entries())
             .find(([, socket]) => socket === ws)?.[0];
           if (requesterId) handleRematchRequest(requesterId);
+          break;
+        }
+        case 'respond_to_rematch': {
+          const hostId = Array.from(playerToSocket.entries())
+            .find(([, socket]) => socket === ws)?.[0];
+          if (hostId) handleRematchResponse(hostId, message.requesterId, message.accept);
+          break;
+        }
+        case 'allow_chat_transition': {
+          const hostId = Array.from(playerToSocket.entries())
+            .find(([, socket]) => socket === ws)?.[0];
+          if (hostId) handleAllowChatTransition(hostId);
           break;
         }
       }
